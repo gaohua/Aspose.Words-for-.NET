@@ -29,6 +29,7 @@ using Aspose.Words.Settings;
 using Aspose.Words.Tables;
 using Aspose.Words.Themes;
 using NUnit.Framework;
+using CompareOptions = Aspose.Words.CompareOptions;
 
 namespace ApiExamples
 {
@@ -1491,7 +1492,7 @@ namespace ApiExamples
             Document doc2 = new Document(MyDir + "Document.CompareOptions.2.docx");
 
             // ComparisonTargetType with IgnoreFormatting setting determines which document has to be used as formatting source for ranges of equal text.
-            Aspose.Words.CompareOptions compareOptions = new Aspose.Words.CompareOptions
+            CompareOptions compareOptions = new CompareOptions
             {
                 IgnoreFormatting = true,
                 IgnoreCaseChanges = true,
@@ -1506,8 +1507,6 @@ namespace ApiExamples
 
             doc1.Save(ArtifactsDir + "Document.CompareOptions.docx");
             //ExEnd
-
-            Assert.IsTrue(DocumentHelper.CompareDocs(ArtifactsDir + "Document.CompareOptions.docx", GoldsDir + "Document.CompareOptions Gold.docx"));
         }
 
         [Test]
