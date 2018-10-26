@@ -276,13 +276,15 @@ namespace ApiExamples
             //ExSummary:Converts a page of a Word document into JPEG images of different qualities.
             Document doc = new Document(MyDir + "Rendering.doc");
 
+            ImageSaveOptions saveOptions = new ImageSaveOptions(SaveFormat.Jpeg);
+
             // Try worst quality.
-            options.JpegQuality = 0;
-            doc.Save(ArtifactsDir + "Rendering.SaveToImageJpegQuality0.jpeg", options);
+            saveOptions.JpegQuality = 0;
+            doc.Save(ArtifactsDir + "Rendering.SaveToImageJpegQuality0.jpeg", saveOptions);
 
             // Try best quality.
-            options.JpegQuality = 100;
-            doc.Save(ArtifactsDir + "Rendering.SaveToImageJpegQuality100.jpeg", options);
+            saveOptions.JpegQuality = 100;
+            doc.Save(ArtifactsDir + "Rendering.SaveToImageJpegQuality100.jpeg", saveOptions);
             //ExEnd
         }
 

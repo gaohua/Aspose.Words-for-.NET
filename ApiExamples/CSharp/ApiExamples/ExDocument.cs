@@ -147,6 +147,7 @@ namespace ApiExamples
             //ExFor:LoadOptions.BaseUri
             //ExId:DocumentCtor_LoadOptions
             //ExSummary:Opens an HTML document with images from a stream using a base URI.
+            Document doc = new Document();
             // We are opening this HTML file:      
             //    <html>
             //    <body>

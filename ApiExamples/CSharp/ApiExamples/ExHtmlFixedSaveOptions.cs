@@ -50,7 +50,7 @@ namespace ApiExamples
                 Encoding = Encoding.GetEncoding("utf-16")
             };
 
-            doc.Save(MyDir + @"\Artifacts\EncodingUsingGetEncoding.html", htmlFixedSaveOptions);
+            doc.Save(ArtifactsDir + "EncodingUsingGetEncoding.html", htmlFixedSaveOptions);
         }
 
         // Note: Test doesn't contain validation result, because it's may take a lot of time for assert result
@@ -94,27 +94,7 @@ namespace ApiExamples
                 ExportFormFields = true
             };
 
-            doc.Save(ArtifactsDir + "EncodingUsingGetEncoding.html", htmlFixedSaveOptions);
-        }
-
-        [Test]
-        public void SaveFontFaceCssSeparately()
-        {
-            //ExStart
-            //ExFor:HtmlFixedSaveOptions.SaveFontFaceCssSeparately
-            //ExSummary:Shows how to placed '@font-face' CSS rules into separate 'fontFaces.css' file.
-            Document doc = new Document(MyDir + "Bookmark.doc");
-
-            HtmlFixedSaveOptions htmlFixedSaveOptions = new HtmlFixedSaveOptions
-            {
-                SaveFontFaceCssSeparately = true
-            };
-
-            HtmlFixedSaveOptions htmlFixedSaveOptions = new HtmlFixedSaveOptions();
-            htmlFixedSaveOptions.ExportFormFields = true;
-            
-            doc.Save(ArtifactsDir + "ExportFormFiels.html", htmlFixedSaveOptions);
-            //ExEnd
+            doc.Save(ArtifactsDir + "ExportFormFields.html", htmlFixedSaveOptions);
         }
 
         [Test]
@@ -122,6 +102,7 @@ namespace ApiExamples
         {
             //ExStart
             //ExFor:HtmlFixedSaveOptions.CssClassNamesPrefix
+            //ExFor:HtmlFixedSaveOptions.SaveFontFaceCssSeparately
             //ExSummary:Shows how to add prefix to all class names in css file.
             Document doc = new Document(MyDir + "Bookmark.doc");
 

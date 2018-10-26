@@ -993,8 +993,10 @@ namespace ApiExamples
                 },
                 new double[] { 1.2, 0.3, 2.1, 2.9, 4.2, 5.3 });
 
-            // Set X axis bounds.
             ChartAxis xAxis = chart.AxisX;
+            ChartAxis yAxis = chart.AxisY;
+
+            // Set X axis bounds.
             xAxis.Scaling.Minimum = new AxisBound(new DateTime(2017, 11, 05).ToOADate());
             xAxis.Scaling.Maximum = new AxisBound(new DateTime(2017, 12, 03).ToOADate());
 
@@ -1003,8 +1005,7 @@ namespace ApiExamples
             xAxis.MinorUnit = 1;
             xAxis.MajorTickMark = AxisTickMark.Cross;
             xAxis.MinorTickMark = AxisTickMark.Outside;
-            //ExEnd
-
+            
             // Define Y axis properties.
             yAxis.TickLabelPosition = AxisTickLabelPosition.High;
             yAxis.MajorUnit = 100;
@@ -1014,6 +1015,7 @@ namespace ApiExamples
             yAxis.Scaling.Maximum = new AxisBound(700);
 
             doc.Save(ArtifactsDir + "ChartAxisProperties.docx");
+            //ExEnd
         }
 
         [Test]

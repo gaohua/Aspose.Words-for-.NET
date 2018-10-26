@@ -160,13 +160,6 @@ namespace ApiExamples
             };
             doc.Save(MyDir + @"\Artifacts\SaveOptions.PdfImageCompression.pdf", options);
 
-            PdfSaveOptions options = new PdfSaveOptions();
-
-            options.ImageCompression = PdfImageCompression.Jpeg;
-            options.PreserveFormFields = true;
-
-            doc.Save(ArtifactsDir + "SaveOptions.PdfImageCompression.pdf", options);
-
             PdfSaveOptions optionsA1B = new PdfSaveOptions();
             optionsA1B.Compliance = PdfCompliance.PdfA1b;
             optionsA1B.ImageCompression = PdfImageCompression.Jpeg;
