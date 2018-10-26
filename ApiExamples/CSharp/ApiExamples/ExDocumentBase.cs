@@ -1,4 +1,5 @@
-﻿using Aspose.Words;
+﻿using System.Net;
+using Aspose.Words;
 using Aspose.Words.BuildingBlocks;
 using Aspose.Words.Drawing;
 using NUnit.Framework;
@@ -30,7 +31,7 @@ namespace ApiExamples
         {
             //ExStart
             //ExFor:DocumentBase.PageColor
-            //ExSummary:Shows how to set the page colour.
+            //ExSummary:Shows how to set the page color.
             Document doc = new Document();
 
             doc.PageColor = System.Drawing.Color.LightGray;
@@ -50,28 +51,30 @@ namespace ApiExamples
 
             // Add text to both documents
             src.FirstSection.Body.FirstParagraph.AppendChild(new Run(src, "Source document first paragraph text."));
-            dst.FirstSection.Body.FirstParagraph.AppendChild(new Run(dst, "Destination document first paragraph text."));
+            dst.FirstSection.Body.FirstParagraph.AppendChild(new Run(dst,
+                "Destination document first paragraph text."));
 
             // If we want to add the section from doc2 to doc1, we can't just append them like this:
             // dst.AppendChild(src.FirstSection);
-
             // Uncommenting that line throws an exception because doc2's first section belongs to doc2,
             // but each node in a document must belong to the document
             Assert.AreNotEqual(dst, src.FirstSection.Document);
 
             // We can create a new node that belongs to the destination document
-            Section importedSection = (Section)dst.ImportNode(src.FirstSection, true);
+            Section importedSection = (Section) dst.ImportNode(src.FirstSection, true);
 
             // It has the same content but it is not the same node nor do they have the same owner
             Assert.AreNotEqual(importedSection, src.FirstSection);
             Assert.AreNotEqual(importedSection.Document, src.FirstSection.Document);
-            Assert.AreEqual(importedSection.Body.FirstParagraph.GetText(), src.FirstSection.Body.FirstParagraph.GetText());
+            Assert.AreEqual(importedSection.Body.FirstParagraph.GetText(),
+                src.FirstSection.Body.FirstParagraph.GetText());
 
             // Now it is ready to be placed in the document
             dst.AppendChild(importedSection);
 
             // Our document does indeed contain both the original and imported section
-            Assert.AreEqual("Destination document first paragraph text.\r\nSource document first paragraph text.\r\n", dst.ToString(SaveFormat.Text));
+            Assert.AreEqual("Destination document first paragraph text.\r\nSource document first paragraph text.\r\n",
+                dst.ToString(SaveFormat.Text));
             //ExEnd
         }
 
@@ -84,7 +87,7 @@ namespace ApiExamples
             // Create two documents with two styles that aren't the same but have the same name
             Document src = new Document();
             Style srcStyle = src.Styles.Add(StyleType.Character, "My style");
-            DocumentBuilder srcBuilder = new DocumentBuilder(src); 
+            DocumentBuilder srcBuilder = new DocumentBuilder(src);
             srcBuilder.Font.Style = srcStyle;
             srcBuilder.Writeln("Source document text.");
 
@@ -104,7 +107,6 @@ namespace ApiExamples
             Assert.IsNotNull(dst.Styles["My style_0"]);
             //ExEnd
         }
-
 
         [Test]
         public void BackgroundShape()
@@ -134,7 +136,7 @@ namespace ApiExamples
             // The default values for these variables are 0.5, so here we are lowering the contrast and increasing the brightness
             shapeRectangle.ImageData.Contrast = 0.2;
             shapeRectangle.ImageData.Brightness = 0.7;
-            
+
             // Microsoft Word does not support images in background shapes, so even though we set the background as an image,
             // the output will show a light blue background like before
             // However, we can see our watermark in an output pdf
@@ -181,27 +183,33 @@ namespace ApiExamples
                     // We can still process those inputs and find an image any way we like, as long as an image byte array is passed to args.SetData()
                     if (args.OriginalUri == "Google Logo")
                     {
-                        System.Net.WebClient webClient = new System.Net.WebClient();
-                        byte[] imageBytes = webClient.DownloadData("http://www.google.com/images/logos/ps_logo2.png");
-                        args.SetData(imageBytes);
-                        // We need this return statement any time a resource is loaded in a custom manner
-                        return ResourceLoadingAction.UserProvided;
+                        using (WebClient webClient = new WebClient())
+                        {
+                            byte[] imageBytes =
+                                webClient.DownloadData("http://www.google.com/images/logos/ps_logo2.png");
+                            args.SetData(imageBytes);
+                            // We need this return statement any time a resource is loaded in a custom manner
+                            return ResourceLoadingAction.UserProvided;
+                        }
                     }
 
                     if (args.OriginalUri == "Aspose Logo")
                     {
-                        System.Net.WebClient webClient = new System.Net.WebClient();
-                        byte[] imageBytes = webClient.DownloadData("https://www.aspose.com/Images/aspose-logo.jpg");
-                        args.SetData(imageBytes);
-                        return ResourceLoadingAction.UserProvided;
+                        using (WebClient webClient = new WebClient())
+                        {
+                            byte[] imageBytes = webClient.DownloadData("https://www.aspose.com/Images/aspose-logo.jpg");
+                            args.SetData(imageBytes);
+                            return ResourceLoadingAction.UserProvided;
+                        }
                     }
 
                     // We can find and add an image any way we like, as long as args.SetData() is called with some image byte array as a parameter
                     if (args.OriginalUri == "My Watermark")
                     {
                         System.Drawing.Image watermark = System.Drawing.Image.FromFile(MyDir + "Images/Watermark.png");
+
                         System.Drawing.ImageConverter converter = new System.Drawing.ImageConverter();
-                        byte[] imageBytes = (byte[])converter.ConvertTo(watermark, typeof(byte[]));
+                        byte[] imageBytes = (byte[]) converter.ConvertTo(watermark, typeof(byte[]));
                         args.SetData(imageBytes);
 
                         return ResourceLoadingAction.UserProvided;

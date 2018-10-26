@@ -8,6 +8,7 @@
 using System;
 using System.Data;
 using System.Collections;
+using System.Collections.Generic;
 using Aspose.Words.Fields;
 using Aspose.Words;
 using Aspose.Words.MailMerging;
@@ -15,6 +16,7 @@ using NUnit.Framework;
 #if !(NETSTANDARD2_0 || __MOBILE__)
 using System.Data.OleDb;
 using System.Web;
+
 #endif
 
 namespace ApiExamples
@@ -38,7 +40,8 @@ namespace ApiExamples
             Document doc = new Document(MyDir + "MailMerge.ExecuteArray.doc");
 
             // Fill the fields in the document with user data.
-            doc.MailMerge.Execute(new String[] { "FullName", "Company", "Address", "Address2", "City" }, new object[] { "James Bond", "MI5 Headquarters", "Milbank", "", "London" });
+            doc.MailMerge.Execute(new String[] { "FullName", "Company", "Address", "Address2", "City" },
+                new object[] { "James Bond", "MI5 Headquarters", "Milbank", "", "London" });
 
             // Send the document in Word format to the client browser with an option to save to disk or open inside the current browser.
             Assert.That(() => doc.Save(Response, "Artifacts/MailMerge.ExecuteArray.doc", ContentDisposition.Inline, null), Throws.TypeOf<ArgumentNullException>()); //Thrown because HttpResponse is null in the test.
@@ -169,25 +172,34 @@ namespace ApiExamples
         [Test]
         public void GetFieldNames()
         {
+            //ExStart
+            //ExFor:FieldAddressBlock.#ctor
+            //ExFor:FieldAddressBlock.GetFieldNames
+            //ExSummary:Shows how to get mail merge field names used by the field
             Document doc = new Document(MyDir + "MailMerge.GetFieldNames.docx");
 
-            String[] addressFieldsExpect = { "Company", "First Name", "Middle Name", "Last Name", "Suffix", "Address 1", "City", "State", "Country or Region", "Postal Code" };
+            string[] addressFieldsExpect =
+            {
+                "Company", "First Name", "Middle Name", "Last Name", "Suffix", "Address 1", "City", "State",
+                "Country or Region", "Postal Code"
+            };
 
-            FieldAddressBlock addressBlockField = (FieldAddressBlock)doc.Range.Fields[0]; 
-            String[] addressBlockFieldNames = addressBlockField.GetFieldNames();                     
-                                                                                         
+            FieldAddressBlock addressBlockField = (FieldAddressBlock) doc.Range.Fields[0];
+            string[] addressBlockFieldNames = addressBlockField.GetFieldNames();
+            //ExEnd
+
             Assert.AreEqual(addressFieldsExpect, addressBlockFieldNames);
 
-            String[] greetingFieldsExpect = { "Courtesy Title", "Last Name" };
+            string[] greetingFieldsExpect = { "Courtesy Title", "Last Name" };
 
-            FieldGreetingLine greetingLineField = (FieldGreetingLine)doc.Range.Fields[1];
-            String[] greetingLineFieldNames = greetingLineField.GetFieldNames();
+            FieldGreetingLine greetingLineField = (FieldGreetingLine) doc.Range.Fields[1];
+            string[] greetingLineFieldNames = greetingLineField.GetFieldNames();
 
             Assert.AreEqual(greetingFieldsExpect, greetingLineFieldNames);
-        }                                                                                
-                                                                                         
-        [Test]                                                                           
-        public void UseNonMergeFields()                                                  
+        }
+
+        [Test]
+        public void UseNonMergeFields()
         {
             Document doc = new Document();
             //ExStart
@@ -199,7 +211,8 @@ namespace ApiExamples
 
         [Test]
         [TestCase(true, "{{ testfield1 }}value 1{{ testfield3 }}\f")]
-        [TestCase(false, "\u0013MERGEFIELD \"testfield1\"\u0014«testfield1»\u0015value 1\u0013MERGEFIELD \"testfield3\"\u0014«testfield3»\u0015\f")]
+        [TestCase(false,
+            "\u0013MERGEFIELD \"testfield1\"\u0014«testfield1»\u0015value 1\u0013MERGEFIELD \"testfield3\"\u0014«testfield3»\u0015\f")]
         public void MustasheTemplateSyntax(bool restoreTags, String sectionText)
         {
             Document doc = new Document();
@@ -240,29 +253,29 @@ namespace ApiExamples
             MailMergeRegionInfo regionInfo = doc.MailMerge.GetRegionsHierarchy();
 
             //Get top regions in the document
-            ArrayList topRegions = regionInfo.Regions;
+            IList<MailMergeRegionInfo> topRegions = regionInfo.Regions;
             Assert.AreEqual(2, topRegions.Count);
-            Assert.AreEqual(((MailMergeRegionInfo)topRegions[0]).Name, "Region1");
-            Assert.AreEqual(((MailMergeRegionInfo)topRegions[1]).Name, "Region2");
-            Assert.AreEqual(1, ((MailMergeRegionInfo)topRegions[0]).Level);
-            Assert.AreEqual(1, ((MailMergeRegionInfo)topRegions[1]).Level);
+            Assert.AreEqual("Region1", topRegions[0].Name);
+            Assert.AreEqual("Region2", topRegions[1].Name);
+            Assert.AreEqual(1, topRegions[0].Level);
+            Assert.AreEqual(1, topRegions[1].Level);
 
             //Get nested region in first top region
-            ArrayList nestedRegions = ((MailMergeRegionInfo)topRegions[0]).Regions;
+            IList<MailMergeRegionInfo> nestedRegions = topRegions[0].Regions;
             Assert.AreEqual(2, nestedRegions.Count);
-            Assert.AreEqual(((MailMergeRegionInfo)nestedRegions[0]).Name, "NestedRegion1");
-            Assert.AreEqual(((MailMergeRegionInfo)nestedRegions[1]).Name, "NestedRegion2");
-            Assert.AreEqual(2, ((MailMergeRegionInfo)nestedRegions[0]).Level);
-            Assert.AreEqual(2, ((MailMergeRegionInfo)nestedRegions[1]).Level);
+            Assert.AreEqual("NestedRegion1", nestedRegions[0].Name);
+            Assert.AreEqual("NestedRegion2", nestedRegions[1].Name);
+            Assert.AreEqual(2, nestedRegions[0].Level);
+            Assert.AreEqual(2, nestedRegions[1].Level);
 
             //Get field list in first top region
-            ArrayList fieldList = ((MailMergeRegionInfo)topRegions[0]).Fields;
+            IList<Field> fieldList = topRegions[0].Fields;
             Assert.AreEqual(4, fieldList.Count);
 
-            FieldMergeField startFieldMergeField = ((MailMergeRegionInfo)nestedRegions[0]).StartField;
+            FieldMergeField startFieldMergeField = nestedRegions[0].StartField;
             Assert.AreEqual("TableStart:NestedRegion1", startFieldMergeField.FieldName);
 
-            FieldMergeField endFieldMergeField = ((MailMergeRegionInfo)nestedRegions[0]).EndField;
+            FieldMergeField endFieldMergeField = nestedRegions[0].EndField;
             Assert.AreEqual("TableEnd:NestedRegion1", endFieldMergeField.FieldName);
             //ExEnd
         }
@@ -288,15 +301,10 @@ namespace ApiExamples
         {
             public void TagsReplaced()
             {
-                mTagsReplacedCounter++;
+                TagsReplacedCounter++;
             }
 
-            public int TagsReplacedCounter
-            {
-                get { return mTagsReplacedCounter; }
-            }
-
-            private int mTagsReplacedCounter;
+            public int TagsReplacedCounter { get; private set; }
         }
         //ExEnd
 
@@ -307,7 +315,7 @@ namespace ApiExamples
         {
             Document doc = new Document(MyDir + "MailMerge.RegionsByName.doc");
 
-            ArrayList regions = doc.MailMerge.GetRegionsByName(regionName);
+            IList<MailMergeRegionInfo> regions = doc.MailMerge.GetRegionsByName(regionName);
             Assert.AreEqual(2, regions.Count);
 
             foreach (MailMergeRegionInfo region in regions)
@@ -315,7 +323,7 @@ namespace ApiExamples
                 Assert.AreEqual(regionName, region.Name);
             }
         }
-        
+
         [Test]
         public void CleanupOptions()
         {
@@ -348,10 +356,30 @@ namespace ApiExamples
             {
                 DataRow datarow = dataTable.NewRow();
                 dataTable.Rows.Add(datarow);
-                datarow[0] = "Course " + i.ToString();
+                datarow[0] = "Course " + i;
             }
 
             return dataTable;
+        }
+
+        [Test] 
+        public void UnconditionalMergeFieldsAndRegions()
+        {
+            //ExStart
+            //ExFor:MailMerge.UnconditionalMergeFieldsAndRegions
+            //ExSummary:Shows how to merge fields or regions regardless of the parent IF field's condition.
+            Document doc = new Document(MyDir + "MailMerge.UnconditionalMergeFieldsAndRegions.docx");
+
+            // Merge fields and merge regions are merged regardless of the parent IF field's condition.
+            doc.MailMerge.UnconditionalMergeFieldsAndRegions = true;
+
+            // Fill the fields in the document with user data.
+            doc.MailMerge.Execute(
+                new string[] { "FullName" },
+                new object[] { "James Bond" });
+
+            doc.Save(MyDir + @"\Artifacts\MailMerge.UnconditionalMergeFieldsAndRegions.docx");
+            //ExEnd
         }
     }
 }

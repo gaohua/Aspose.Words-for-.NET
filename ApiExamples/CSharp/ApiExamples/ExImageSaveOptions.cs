@@ -12,6 +12,7 @@ using NUnit.Framework;
 #if !(NETSTANDARD2_0 || __MOBILE__)
 using System.Drawing.Drawing2D;
 using System.Drawing.Text;
+
 #endif
 
 namespace ApiExamples
@@ -27,8 +28,12 @@ namespace ApiExamples
             //ExSummary:Shows how to save metafiles directly without using GDI+ to EMF.
             Document doc = new Document(MyDir + "SaveOptions.MyraidPro.docx");
 
-            ImageSaveOptions saveOptions = new ImageSaveOptions(SaveFormat.Emf);
-            saveOptions.UseGdiEmfRenderer = false;
+            ImageSaveOptions saveOptions = new ImageSaveOptions(SaveFormat.Emf)
+            {
+                UseGdiEmfRenderer = false
+            };
+
+            doc.Save(MyDir + @"\Artifacts\SaveOptions.UseGdiEmfRenderer.docx", saveOptions);
             //ExEnd
         }
 
@@ -36,13 +41,14 @@ namespace ApiExamples
         public void SaveIntoGif()
         {
             //ExStart
-            //ExFor:ImageSaveOptions.UseGdiEmfRenderer
+            //ExFor:ImageSaveOptions.PageIndex
             //ExSummary:Shows how to save specific document page as image file.
             Document doc = new Document(MyDir + "SaveOptions.MyraidPro.docx");
 
-            ImageSaveOptions saveOptions = new ImageSaveOptions(SaveFormat.Gif);
-            //Define which page will save
-            saveOptions.PageIndex = 0;
+            ImageSaveOptions saveOptions = new ImageSaveOptions(SaveFormat.Gif)
+            {
+                PageIndex = 0 // Define which page will save
+            };
 
             doc.Save(ArtifactsDir + "SaveOptions.MyraidPro.gif", saveOptions);
             //ExEnd
@@ -59,9 +65,11 @@ namespace ApiExamples
             //ExSummary:Shows how to set render quality options. 
             Document doc = new Document(MyDir + "SaveOptions.MyraidPro.docx");
 
-            GraphicsQualityOptions qualityOptions = new GraphicsQualityOptions();
-            qualityOptions.SmoothingMode = SmoothingMode.AntiAlias;
-            qualityOptions.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;
+            GraphicsQualityOptions qualityOptions = new GraphicsQualityOptions
+            {
+                SmoothingMode = SmoothingMode.AntiAlias,
+                TextRenderingHint = TextRenderingHint.ClearTypeGridFit
+            };
 
             ImageSaveOptions saveOptions = new ImageSaveOptions(SaveFormat.Jpeg);
             saveOptions.GraphicsQualityOptions = qualityOptions;

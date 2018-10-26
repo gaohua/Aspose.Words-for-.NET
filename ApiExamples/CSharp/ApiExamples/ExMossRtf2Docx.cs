@@ -9,7 +9,7 @@ using Aspose.Words;
 
 namespace ApiExamples
 {
-    public class ExMossRtf2Docx
+    public static class ExMossRtf2Docx
     {
         //ExStart
         //ExId:MossRtf2Docx
@@ -22,6 +22,7 @@ namespace ApiExamples
             // Save the document in the OOXML format.
             doc.Save(outFileName, SaveFormat.Docx);
         }
+
         //ExEnd
     }
 }

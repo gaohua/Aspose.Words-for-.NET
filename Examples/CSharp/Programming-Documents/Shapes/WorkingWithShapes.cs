@@ -19,7 +19,8 @@ namespace Aspose.Words.Examples.CSharp.Programming_Documents.Working_with_Shapes
             SetShapeLayoutInCell(dataDir);
             SetAspectRatioLocked(dataDir);
             InsertShapeUsingDocumentBuilder(dataDir);
-
+            AddCornersSnipped(dataDir);
+            GetActualShapeBoundsPoints(dataDir);
         }
 
         public static void InsertShapeUsingDocumentBuilder(string dataDir)
@@ -105,6 +106,36 @@ namespace Aspose.Words.Examples.CSharp.Programming_Documents.Working_with_Shapes
             doc.Save(dataDir);
             // ExEnd:SetShapeLayoutInCell
             Console.WriteLine("\nShape's IsLayoutInCell property is set successfully.\nFile saved at " + dataDir);
+        }
+
+        public static void AddCornersSnipped(string dataDir)
+        {
+            // ExStart:AddCornersSnipped
+            Document doc = new Document();
+            DocumentBuilder builder = new DocumentBuilder(doc);
+            Shape shape = builder.InsertShape(ShapeType.TopCornersSnipped, 50, 50);
+
+            OoxmlSaveOptions so = new OoxmlSaveOptions(SaveFormat.Docx);
+            so.Compliance = OoxmlCompliance.Iso29500_2008_Transitional;
+            dataDir = dataDir + "AddCornersSnipped_out.docx";
+
+            //Save the document to disk.
+            doc.Save(dataDir, so);
+            // ExEnd:AddCornersSnipped
+            Console.WriteLine("\nCorner Snip shape is created successfully.\nFile saved at " + dataDir);
+        }
+
+        public static void GetActualShapeBoundsPoints(string dataDir)
+        {
+            // ExStart:GetActualShapeBoundsPoints
+            Document doc = new Document();
+            DocumentBuilder builder = new DocumentBuilder(doc);
+            var shape = builder.InsertImage(dataDir + "Test.png");
+            shape.AspectRatioLocked = false;
+
+            Console.Write("\nGets the actual bounds of the shape in points.");
+            Console.WriteLine(shape.GetShapeRenderer().BoundsInPoints);
+            // ExEnd:GetActualShapeBoundsPoints
         }
     }
 }

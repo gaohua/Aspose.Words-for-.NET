@@ -22,22 +22,39 @@ namespace ApiExamples
         {
             //ExStart
             //ExFor:HtmlFixedSaveOptions.Encoding
-            //ExSummary:Shows how to set encoding for exporting to HTML.
+            //ExSummary:Shows how to set encoding while exporting to HTML.
             Document doc = new Document();
 
             DocumentBuilder builder = new DocumentBuilder(doc);
             builder.Writeln("Hello World!");
 
             // Encoding the document
-            HtmlFixedSaveOptions htmlFixedSaveOptions = new HtmlFixedSaveOptions();
-            htmlFixedSaveOptions.Encoding = new ASCIIEncoding();
+            HtmlFixedSaveOptions htmlFixedSaveOptions = new HtmlFixedSaveOptions
+            {
+                Encoding = new ASCIIEncoding()
+            };
 
             doc.Save(ArtifactsDir + "UseEncoding.html", htmlFixedSaveOptions);
             //ExEnd
         }
 
-        //Note: Test doesn't contain validation result, because it's may take a lot of time for assert result
-        //For validation result, you can save the document to HTML file and check out with notepad++, that file encoding will be correctly displayed (Encoding tab in Notepad++)
+        // Note: Test doesn't contain validation result, because it's may take a lot of time for assert result
+        // For validation result, you can save the document to HTML file and check out with notepad++, that file encoding will be correctly displayed (Encoding tab in Notepad++)
+        [Test]
+        public void EncodingUsingGetEncoding()
+        {
+            Document doc = DocumentHelper.CreateDocumentFillWithDummyText();
+
+            HtmlFixedSaveOptions htmlFixedSaveOptions = new HtmlFixedSaveOptions
+            {
+                Encoding = Encoding.GetEncoding("utf-16")
+            };
+
+            doc.Save(MyDir + @"\Artifacts\EncodingUsingGetEncoding.html", htmlFixedSaveOptions);
+        }
+
+        // Note: Test doesn't contain validation result, because it's may take a lot of time for assert result
+        // For validation result, you can save the document to HTML file and check out with notepad++, that file encoding will be correctly displayed (Encoding tab in Notepad++)
         [Test]
         public void ExportEmbeddedObjects()
         {
@@ -49,41 +66,16 @@ namespace ApiExamples
             //ExSummary:Shows how to export embedded objects into HTML file.
             Document doc = DocumentHelper.CreateDocumentFillWithDummyText();
 
-            HtmlFixedSaveOptions htmlFixedSaveOptions = new HtmlFixedSaveOptions();
-            htmlFixedSaveOptions.Encoding = Encoding.ASCII;
-            htmlFixedSaveOptions.ExportEmbeddedCss = true;
-            htmlFixedSaveOptions.ExportEmbeddedFonts = true;
-            htmlFixedSaveOptions.ExportEmbeddedImages = true;
-            htmlFixedSaveOptions.ExportEmbeddedSvg = true;
+            HtmlFixedSaveOptions htmlFixedSaveOptions = new HtmlFixedSaveOptions
+            {
+                ExportEmbeddedCss = true,
+                ExportEmbeddedFonts = true,
+                ExportEmbeddedImages = true,
+                ExportEmbeddedSvg = true
+            };
 
             doc.Save(ArtifactsDir + "ExportEmbeddedObjects.html", htmlFixedSaveOptions);
             //ExEnd
-        }
-
-        //Note: Test doesn't contain validation result, because it's may take a lot of time for assert result
-        //For validation result, you can save the document to HTML file and check out with notepad++, that file encoding will be correctly displayed (Encoding tab in Notepad++)
-        [Test]
-        public void EncodingUsingNewEncoding()
-        {
-            Document doc = DocumentHelper.CreateDocumentFillWithDummyText();
-
-            HtmlFixedSaveOptions htmlFixedSaveOptions = new HtmlFixedSaveOptions();
-            htmlFixedSaveOptions.Encoding = new UTF32Encoding();
-
-            doc.Save(ArtifactsDir + "EncodingUsingNewEncoding.html", htmlFixedSaveOptions);
-        }
-
-        //Note: Test doesn't contain validation result, because it's may take a lot of time for assert result
-        //For validation result, you can save the document to HTML file and check out with notepad++, that file encoding will be correctly displayed (Encoding tab in Notepad++)
-        [Test]
-        public void EncodingUsingGetEncoding()
-        {
-            Document doc = DocumentHelper.CreateDocumentFillWithDummyText();
-
-            HtmlFixedSaveOptions htmlFixedSaveOptions = new HtmlFixedSaveOptions();
-            htmlFixedSaveOptions.Encoding = Encoding.GetEncoding("utf-16");
-
-            doc.Save(ArtifactsDir + "EncodingUsingGetEncoding.html", htmlFixedSaveOptions);
         }
 
         [Test]
@@ -97,6 +89,27 @@ namespace ApiExamples
 
             builder.InsertCheckBox("CheckBox", false, 15);
 
+            HtmlFixedSaveOptions htmlFixedSaveOptions = new HtmlFixedSaveOptions
+            {
+                ExportFormFields = true
+            };
+
+            doc.Save(ArtifactsDir + "EncodingUsingGetEncoding.html", htmlFixedSaveOptions);
+        }
+
+        [Test]
+        public void SaveFontFaceCssSeparately()
+        {
+            //ExStart
+            //ExFor:HtmlFixedSaveOptions.SaveFontFaceCssSeparately
+            //ExSummary:Shows how to placed '@font-face' CSS rules into separate 'fontFaces.css' file.
+            Document doc = new Document(MyDir + "Bookmark.doc");
+
+            HtmlFixedSaveOptions htmlFixedSaveOptions = new HtmlFixedSaveOptions
+            {
+                SaveFontFaceCssSeparately = true
+            };
+
             HtmlFixedSaveOptions htmlFixedSaveOptions = new HtmlFixedSaveOptions();
             htmlFixedSaveOptions.ExportFormFields = true;
             
@@ -105,15 +118,18 @@ namespace ApiExamples
         }
 
         [Test]
-        public void CssPrefix()
+        public void AddCssClassNamesPrefix()
         {
             //ExStart
             //ExFor:HtmlFixedSaveOptions.CssClassNamesPrefix
             //ExSummary:Shows how to add prefix to all class names in css file.
             Document doc = new Document(MyDir + "Bookmark.doc");
 
-            HtmlFixedSaveOptions htmlFixedSaveOptions = new HtmlFixedSaveOptions();
-            htmlFixedSaveOptions.CssClassNamesPrefix = "test";
+            HtmlFixedSaveOptions htmlFixedSaveOptions = new HtmlFixedSaveOptions
+            {
+                CssClassNamesPrefix = "test",
+                SaveFontFaceCssSeparately = true
+            };
 
             doc.Save(ArtifactsDir + "cssPrefix_Out.html", htmlFixedSaveOptions);
             //ExEnd
@@ -130,22 +146,13 @@ namespace ApiExamples
             //ExSummary:Shows how to set the horizontal alignment of pages in HTML file.
             Document doc = new Document(MyDir + "Bookmark.doc");
 
-            HtmlFixedSaveOptions htmlFixedSaveOptions = new HtmlFixedSaveOptions();
-            htmlFixedSaveOptions.PageHorizontalAlignment = HtmlFixedPageHorizontalAlignment.Left;
+            HtmlFixedSaveOptions htmlFixedSaveOptions = new HtmlFixedSaveOptions
+            {
+                PageHorizontalAlignment = HtmlFixedPageHorizontalAlignment.Left
+            };
 
             doc.Save(ArtifactsDir + "HtmlFixedPageHorizontalAlignment.html", htmlFixedSaveOptions);
             //ExEnd
-        }
-
-        [Test]
-        public void PageMarginsException()
-        {
-            Document doc = new Document(MyDir + "Bookmark.doc");
-
-            HtmlFixedSaveOptions saveOptions = new HtmlFixedSaveOptions();
-            Assert.That(() => saveOptions.PageMargins = -1, Throws.TypeOf<ArgumentException>());
-
-            doc.Save(ArtifactsDir + "HtmlFixedPageMargins.html", saveOptions);
         }
 
         [Test]
@@ -156,26 +163,53 @@ namespace ApiExamples
             //ExSummary:Shows how to set the margins around pages in HTML file.
             Document doc = new Document(MyDir + "Bookmark.doc");
 
+            HtmlFixedSaveOptions saveOptions = new HtmlFixedSaveOptions
+            {
+                PageMargins = 10
+            };
+
+            doc.Save(ArtifactsDir + "HtmlFixedPageMargins.html", saveOptions);
+        }
+
+        [Test]
+        public void PageMarginsException()
+        {
             HtmlFixedSaveOptions saveOptions = new HtmlFixedSaveOptions();
-            saveOptions.PageMargins = 10;
+            Assert.That(() => saveOptions.PageMargins = -1, Throws.TypeOf<ArgumentException>());
+        }
+
+        [Test]
+        public void OptimizeGraphicsOutput()
+        {
+            //ExStart
+            //ExFor:FixedPageSaveOptions.OptimizeOutput
+            //ExSummary:Shows how to optimize document objects while saving.
+            Document doc = new Document(MyDir + "HtmlFixedSaveOptions.OptimizeGraphicsOutput.doc");
+
+            HtmlFixedSaveOptions saveOptions = new HtmlFixedSaveOptions
+            {
+                OptimizeOutput = false
+            };
 
             doc.Save(ArtifactsDir + "HtmlFixedPageMargins.html", saveOptions);
             //ExEnd
         }
 
-        [Test]
+        //ExStart
+        //ExFor:HtmlFixedSaveOptions.UseTargetMachineFonts
+        //ExSummary: Shows how used target machine fonts to display the document.
+        [Test] //ExSkip
         public void UsingMachineFonts()
         {
-            //ExStart
-            //ExFor:HtmlFixedSaveOptions.UseTargetMachineFonts
-            //ExSummary: Shows how used target machine fonts to display the document
-            Document doc = new Document(MyDir + "Font.DisapearingBulletPoints.doc");
+            Document doc = new Document(MyDir + "Font.DisappearingBulletPoints.doc");
 
-            HtmlFixedSaveOptions saveOptions = new HtmlFixedSaveOptions();
-            saveOptions.UseTargetMachineFonts = true;
-            saveOptions.FontFormat = ExportFontFormat.Ttf;
-            saveOptions.ExportEmbeddedFonts = false;
-            saveOptions.ResourceSavingCallback = new ResourceSavingCallback();
+            HtmlFixedSaveOptions saveOptions = new HtmlFixedSaveOptions
+            {
+                UseTargetMachineFonts = true,
+                FontFormat = ExportFontFormat.Ttf,
+                ExportEmbeddedFonts = false,
+                ResourceSavingCallback = new ResourceSavingCallback()
+            };
 
             doc.Save(ArtifactsDir + "UseMachineFonts.html", saveOptions);
         }
@@ -196,12 +230,14 @@ namespace ApiExamples
                     case ".ttf":
                     case ".woff":
                     {
-                        Assert.Fail("'ResourceSavingCallback' is not fired for fonts when 'UseTargetMachineFonts' is true");
+                        Assert.Fail(
+                            "'ResourceSavingCallback' is not fired for fonts when 'UseTargetMachineFonts' is true");
                         break;
                     }
                 }
             }
         }
+
         //ExEnd
     }
 }

@@ -9,12 +9,12 @@ using Aspose.Words;
 using Aspose.Words.Drawing;
 using Aspose.Words.Tables;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using NUnit.Framework;
 
 #if !(NETSTANDARD2_0 || __MOBILE__)
-using System.Collections.Generic;
-using System.Linq;
 using iTextSharp.text.pdf;
 using iTextSharp.text.pdf.parser;
 #endif
@@ -22,12 +22,12 @@ using iTextSharp.text.pdf.parser;
 namespace ApiExamples
 {
     /// <summary>
-    /// Functions for operations with document and content
+    /// Functions for operations with documents and content
     /// </summary>
     internal class DocumentHelper : ApiExampleBase
     {
         /// <summary>
-        /// Create new document without run in the paragraph
+        /// Create simple document without run in the paragraph
         /// </summary>
         internal static Document CreateDocumentWithoutDummyText()
         {
@@ -106,7 +106,7 @@ namespace ApiExamples
         /// <summary>
         /// Create new document template for reporting engine
         /// </summary>
-        internal static Document CreateSimpleDocument(String templateText)
+        internal static Document CreateSimpleDocument(string templateText)
         {
             Document doc = new Document();
             DocumentBuilder builder = new DocumentBuilder(doc);
@@ -119,7 +119,7 @@ namespace ApiExamples
         /// <summary>
         /// Create new document with textbox shape and some query
         /// </summary>
-        internal static Document CreateTemplateDocumentWithDrawObjects(String templateText, ShapeType shapeType)
+        internal static Document CreateTemplateDocumentWithDrawObjects(string templateText, ShapeType shapeType)
         {
             Document doc = new Document();
 
@@ -288,14 +288,10 @@ namespace ApiExamples
 
 #if !(NETSTANDARD2_0 || __MOBILE__)
         /// <summary>
-        /// comparing two PDF documents.
+        /// Comparing two PDF documents.
         /// </summary>
-        /// <param name="firstPdf">
-        /// The first PDF document.
-        /// </param>
-        /// <param name="secondPdf">
-        /// The second PDF document.
-        /// </param>
+        /// <param name="firstPdf">The first PDF document</param>
+        /// <param name="secondPdf">The second PDF document</param>
         internal static void ComparePdf(string firstPdf, string secondPdf)
         {
             if (File.Exists(firstPdf) && File.Exists(secondPdf))
@@ -322,13 +318,10 @@ namespace ApiExamples
                 Console.WriteLine("Files does not exist.");
             }
 
-            List<string> file1Diff;
-            List<string> file2Diff;
-
             IEnumerable<string> file1 = mFirstFile.Trim().Split('\r', '\n');
             IEnumerable<string> file2 = mSecondFile.Trim().Split('\r', '\n');
-            file1Diff = file1.ToList();
-            file2Diff = file2.ToList();
+            List<string> file1Diff = file1.ToList();
+            List<string> file2Diff = file2.ToList();
 
             if (file2.Count() > file1.Count())
             {
@@ -337,7 +330,8 @@ namespace ApiExamples
                 {
                     if (!file1Diff[i].Equals(file2Diff[i]))
                     {
-                        Console.WriteLine("File 1 content: " + file1Diff[i] + "\r\n" + "File 2 content: " + file2Diff[i]);
+                        Console.WriteLine(
+                            "File 1 content: " + file1Diff[i] + "\r\n" + "File 2 content: " + file2Diff[i]);
                     }
                 }
 
@@ -356,7 +350,8 @@ namespace ApiExamples
                 {
                     if (!file1Diff[i].Equals(file2Diff[i]))
                     {
-                        Console.WriteLine("File 1 content: " + file1Diff[i] + "\r\n" + "File 2 content: " + file2Diff[i]);
+                        Console.WriteLine(
+                            "File 1 content: " + file1Diff[i] + "\r\n" + "File 2 content: " + file2Diff[i]);
                     }
                 }
 
@@ -375,7 +370,8 @@ namespace ApiExamples
                 {
                     if (!file1Diff[i].Equals(file2Diff[i]))
                     {
-                        Console.WriteLine("File 1 content: " + file1Diff[i] + "\r\n" + "File 2 Content: " + file2Diff[i]);
+                        Console.WriteLine(
+                            "File 1 content: " + file1Diff[i] + "\r\n" + "File 2 Content: " + file2Diff[i]);
                     }
                 }
 

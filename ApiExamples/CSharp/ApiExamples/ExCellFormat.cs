@@ -104,7 +104,7 @@ namespace ApiExamples
                 builder.Document.Save(dstStream, SaveFormat.Docx);
             }
 
-            Table table = (Table)builder.Document.GetChild(NodeType.Table, 0, true);
+            Table table = (Table) builder.Document.GetChild(NodeType.Table, 0, true);
 
             Cell cell = table.Rows[0].Cells[0];
 

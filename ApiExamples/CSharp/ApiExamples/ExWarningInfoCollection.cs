@@ -6,6 +6,7 @@
 //////////////////////////////////////////////////////////////////////////
 
 using System;
+using System.Collections.Generic;
 using Aspose.Words;
 using NUnit.Framework;
 
@@ -23,14 +24,17 @@ namespace ApiExamples
             //ExSummary:Shows how to read and clear a collection of warnings.
             WarningInfoCollection wic = new WarningInfoCollection();
 
-            var enumerator = wic.GetEnumerator();
-            while (enumerator.MoveNext())
+            using (IEnumerator<WarningInfo> enumerator = wic.GetEnumerator())
             {
-                WarningInfo wi = (WarningInfo)enumerator.Current;
-                Console.WriteLine(wi.Description);
+                while (enumerator.MoveNext())
+                {
+                    WarningInfo wi = enumerator.Current;
+                    if (wi != null) Console.WriteLine(wi.Description);
+                }
+
+                wic.Clear();
             }
 
-            wic.Clear();
             //ExEnd
         }
     }

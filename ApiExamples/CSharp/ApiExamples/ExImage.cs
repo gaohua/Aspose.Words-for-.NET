@@ -7,6 +7,7 @@
 
 using System.Collections;
 using System.IO;
+using System.Linq;
 using Aspose.Words;
 using Aspose.Words.Drawing;
 using NUnit.Framework;
@@ -15,6 +16,7 @@ using SkiaSharp;
 #endif
 #if !(NETSTANDARD2_0 || __MOBILE__)
 using System.Drawing;
+
 #endif
 
 namespace ApiExamples
@@ -79,8 +81,8 @@ namespace ApiExamples
             // This creates a builder and also an empty document inside the builder.
             DocumentBuilder builder = new DocumentBuilder();
 #if NETSTANDARD2_0 || __MOBILE__
-            // Insert a raster image.
-            // SKBitmap doesn't allow to insert a metafiles.
+// Insert a raster image.
+// SKBitmap doesn't allow to insert a metafiles.
             using (SKBitmap rasterImage = SKBitmap.Decode(MyDir + "Images/Aspose.Words.gif"))
             {
                 builder.Write("Raster image: ");
@@ -290,7 +292,7 @@ namespace ApiExamples
             // We cannot delete shape nodes while we enumerate through the collection.
             // One solution is to add nodes that we want to delete to a temporary array and delete afterwards.
             ArrayList shapesToDelete = new ArrayList();
-            foreach (Shape shape in shapes)
+            foreach (Shape shape in shapes.OfType<Shape>())
             {
                 // Several shape types can have an image including image shapes and OLE objects.
                 if (shape.HasImage)
@@ -322,7 +324,7 @@ namespace ApiExamples
 
                 if (curNode.NodeType.Equals(NodeType.Shape))
                 {
-                    Shape shape = (Shape)curNode;
+                    Shape shape = (Shape) curNode;
 
                     // Several shape types can have an image including image shapes and OLE objects.
                     if (shape.HasImage)

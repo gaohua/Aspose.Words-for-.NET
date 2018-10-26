@@ -22,10 +22,12 @@ namespace ApiExamples
             //ExSummary:Shows how to optimize document objects while saving.
             Document doc = new Document(MyDir + "XPSOutputOptimize.docx");
 
-            XpsSaveOptions saveOptions = new XpsSaveOptions();
-            saveOptions.OptimizeOutput = true;
+            XpsSaveOptions saveOptions = new XpsSaveOptions
+            {
+                OptimizeOutput = true
+            };
 
-            doc.Save(ArtifactsDir + "XPSOutputOptimize.xps");
+            doc.Save(MyDir + @"\Artifacts\XPSOutputOptimize.xps", saveOptions);
             //ExEnd
         }
     }

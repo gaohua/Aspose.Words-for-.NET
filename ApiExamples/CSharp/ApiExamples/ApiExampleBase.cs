@@ -7,6 +7,7 @@
 
 using System;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using Aspose.Words;
 using NUnit.Framework;
@@ -18,10 +19,14 @@ namespace ApiExamples
     /// </summary>
     public class ApiExampleBase
     {
+        private readonly string artifactsPath = MyDir + @"\Artifacts\";
+
         [SetUp]
         public void SetUp()
         {
-            SetUnlimitedLicense();
+            if (!CheckForSkipSetUp())
+            {
+                SetUnlimitedLicense();
 
             if (!Directory.Exists(ArtifactsDir))
                 //Create new empty directory
@@ -31,8 +36,29 @@ namespace ApiExamples
         [TearDown]
         public void TearDown()
         {
-            //Delete all dirs and files from directory
-            Directory.Delete(ArtifactsDir, true);
+            if (!CheckForSkipTearDown())
+            {
+                //Delete all dirs and files from directory
+                Directory.Delete(artifactsPath, true);
+            }
+        }
+
+        /// <summary>
+        /// Checks when we need to skip precondition before test.
+        /// </summary>
+        private static bool CheckForSkipSetUp()
+        {
+            bool skipSetup = TestContext.CurrentContext.Test.Properties["Category"].Contains("SkipSetup");
+            return skipSetup;
+        }
+
+        /// <summary>
+        /// Checks when we need to skip post-condition after test.
+        /// </summary>
+        private static bool CheckForSkipTearDown()
+        {
+            bool skipSetup = TestContext.CurrentContext.Test.Properties["Category"].Contains("SkipTearDown");
+            return skipSetup;
         }
 
         internal static void SetUnlimitedLicense()
@@ -48,16 +74,10 @@ namespace ApiExamples
             }
         }
 
-        internal static void RemoveLicense()
-        {
-            License license = new License();
-            license.SetLicense("");
-        }
-
         /// <summary>
         /// Returns the assembly directory correctly even if the assembly is shadow-copied.
         /// </summary>
-        private static String GetAssemblyDir(Assembly assembly)
+        internal static string GetAssemblyDir(Assembly assembly)
         {
             // CodeBase is a full URI, such as file:///x:\blahblah.
             Uri uri = new Uri(assembly.CodeBase);
@@ -67,7 +87,7 @@ namespace ApiExamples
         /// <summary>
         /// Gets the path to the currently running executable.
         /// </summary>
-        internal static String AssemblyDir
+        internal static string AssemblyDir
         {
             get { return gAssemblyDir; }
         }
@@ -99,7 +119,7 @@ namespace ApiExamples
         /// <summary>
         /// Gets the path to the images used by the code examples. Ends with a back slash.
         /// </summary>
-        internal static String ImageDir
+        internal static string ImageDir
         {
             get { return gImageDir; }
         }
@@ -107,7 +127,7 @@ namespace ApiExamples
         /// <summary>
         /// Gets the path of the demo database. Ends with a back slash.
         /// </summary>
-        internal static String DatabaseDir
+        internal static string DatabaseDir
         {
             get { return gDatabaseDir; }
         }
@@ -132,6 +152,6 @@ namespace ApiExamples
         /// <summary>
         /// This is where the test license is on my development machine.
         /// </summary>
-        internal const String TestLicenseFileName = @"X:\awnet\TestData\Licenses\Aspose.Total.lic";
+        internal const string TestLicenseFileName = @"X:\awnet\TestData\Licenses\Aspose.Total.lic";
     }
 }

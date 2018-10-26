@@ -104,10 +104,16 @@ namespace ApiExamples
             Document doc = new Document(MyDir + "Document.Encrypted.docx", new LoadOptions("docPassword"));
             string outputFileName = ArtifactsDir + "Document.Encrypted.docx";
 
-            SignOptions signOptions = new SignOptions { Comments = "Comment", SignTime = DateTime.Now, DecryptionPassword = "docPassword1" };
+            SignOptions signOptions = new SignOptions
+            {
+                Comments = "Comment",
+                SignTime = DateTime.Now,
+                DecryptionPassword = "docPassword1"
+            };
 
             // Digitally sign encrypted with "docPassword" document in the specified path.
-            Assert.That(() => DigitalSignatureUtil.Sign(doc.OriginalFileName, outputFileName, certificateHolder, signOptions),
+            Assert.That(
+                () => DigitalSignatureUtil.Sign(doc.OriginalFileName, outputFileName, certificateHolder, signOptions),
                 Throws.TypeOf<IncorrectPasswordException>(), "The document password is incorrect.");
         }
 
@@ -125,7 +131,12 @@ namespace ApiExamples
             // Create certificate holder from a file.
             CertificateHolder certificateHolder = CertificateHolder.Create(MyDir + "morzal.pfx", "aw");
 
-            SignOptions signOptions = new SignOptions { Comments = "Comment", SignTime = DateTime.Now, DecryptionPassword = "docPassword" };
+            SignOptions signOptions = new SignOptions
+            {
+                Comments = "Comment",
+                SignTime = DateTime.Now,
+                DecryptionPassword = "docPassword"
+            };
 
             // Digitally sign encrypted with "docPassword" document in the specified path.
             DigitalSignatureUtil.Sign(doc.OriginalFileName, outputFileName, certificateHolder, signOptions);
@@ -145,7 +156,12 @@ namespace ApiExamples
         [Test]
         public void NoArgumentsForSing()
         {
-            SignOptions signOptions = new SignOptions { Comments = String.Empty, SignTime = DateTime.Now, DecryptionPassword = String.Empty };
+            SignOptions signOptions = new SignOptions
+            {
+                Comments = String.Empty,
+                SignTime = DateTime.Now,
+                DecryptionPassword = String.Empty
+            };
 
             Assert.That(() => DigitalSignatureUtil.Sign(String.Empty, String.Empty, null, signOptions),
                 Throws.TypeOf<ArgumentException>());
@@ -157,7 +173,12 @@ namespace ApiExamples
             Document doc = new Document(MyDir + "Document.DigitalSignature.docx");
             string outputFileName = ArtifactsDir + "Document.DigitalSignature.docx";
 
-            SignOptions signOptions = new SignOptions { Comments = "Comment", SignTime = DateTime.Now, DecryptionPassword = "docPassword" };
+            SignOptions signOptions = new SignOptions
+            {
+                Comments = "Comment",
+                SignTime = DateTime.Now,
+                DecryptionPassword = "docPassword"
+            };
 
             Assert.That(() => DigitalSignatureUtil.Sign(doc.OriginalFileName, outputFileName, null, signOptions),
                 Throws.TypeOf<ArgumentNullException>());

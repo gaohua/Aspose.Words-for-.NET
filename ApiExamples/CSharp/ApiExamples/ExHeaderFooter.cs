@@ -5,6 +5,7 @@
 // "as is", without warranty of any kind, either expressed or implied.
 //////////////////////////////////////////////////////////////////////////
 
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using Aspose.Words;
@@ -39,7 +40,8 @@ namespace ApiExamples
             doc.Save(ArtifactsDir + "HeaderFooter.CreateFooter.doc");
             //ExEnd
 
-            Assert.True(doc.FirstSection.HeadersFooters[HeaderFooterType.FooterPrimary].Range.Text.Contains("TEST FOOTER"));
+            Assert.True(doc.FirstSection.HeadersFooters[HeaderFooterType.FooterPrimary].Range.Text
+                .Contains("TEST FOOTER"));
         }
 
         [Test]
@@ -55,24 +57,19 @@ namespace ApiExamples
             //ExSummary:Deletes all footers from all sections, but leaves headers intact.
             Document doc = new Document(MyDir + "HeaderFooter.RemoveFooters.doc");
 
-            foreach (Section section in doc)
+            foreach (Section section in doc.OfType<Section>())
             {
                 // Up to three different footers are possible in a section (for first, even and odd pages).
                 // We check and delete all of them.
-                HeaderFooter footer;
-
-                footer = section.HeadersFooters[HeaderFooterType.FooterFirst];
-                if (footer != null)
-                    footer.Remove();
+                HeaderFooter footer = section.HeadersFooters[HeaderFooterType.FooterFirst];
+                footer?.Remove();
 
                 // Primary footer is the footer used for odd pages.
                 footer = section.HeadersFooters[HeaderFooterType.FooterPrimary];
-                if (footer != null)
-                    footer.Remove();
+                footer?.Remove();
 
                 footer = section.HeadersFooters[HeaderFooterType.FooterEven];
-                if (footer != null)
-                    footer.Remove();
+                footer?.Remove();
             }
 
             doc.Save(ArtifactsDir + "HeaderFooter.RemoveFooters.doc");
@@ -88,8 +85,9 @@ namespace ApiExamples
             //ExSummary:Demonstrates how to disable the export of headers and footers when saving to HTML based formats.
             Document doc = new Document(MyDir + "HeaderFooter.RemoveFooters.doc");
 
-            HtmlSaveOptions saveOptions = new HtmlSaveOptions(SaveFormat.Html);
-            saveOptions.ExportHeadersFootersMode = ExportHeadersFootersMode.None; // Disables exporting headers and footers.
+            // Disables exporting headers and footers.
+            HtmlSaveOptions saveOptions =
+                new HtmlSaveOptions(SaveFormat.Html) { ExportHeadersFootersMode = ExportHeadersFootersMode.None };
 
             doc.Save(ArtifactsDir + "HeaderFooter.DisableHeadersFooters.html", saveOptions);
             //ExEnd
@@ -115,10 +113,12 @@ namespace ApiExamples
             HeaderFooterCollection headersFooters = doc.FirstSection.HeadersFooters;
             HeaderFooter footer = headersFooters[HeaderFooterType.FooterPrimary];
 
-            FindReplaceOptions options = new FindReplaceOptions();
-            options.MatchCase = false;
-            options.FindWholeWordsOnly = false;
-            
+            FindReplaceOptions options = new FindReplaceOptions
+            {
+                MatchCase = false,
+                FindWholeWordsOnly = false
+            };
+
             footer.Range.Replace("(C) 2006 Aspose Pty Ltd.", "Copyright (C) 2011 by Aspose Pty Ltd.", options);
 
             doc.Save(ArtifactsDir + "HeaderFooter.ReplaceText.doc");
@@ -143,9 +143,8 @@ namespace ApiExamples
             Section firstPageSection = doc.FirstSection;
             Assert.AreEqual(true, firstPageSection.PageSetup.DifferentFirstPageHeaderFooter);
 
-            FindReplaceOptions options = new FindReplaceOptions();
             ReplaceLog logger = new ReplaceLog();
-            options.ReplacingCallback = logger;
+            FindReplaceOptions options = new FindReplaceOptions { ReplacingCallback = logger };
 
             doc.Range.Replace(new Regex("(header|footer)"), "", options);
 
@@ -159,7 +158,7 @@ namespace ApiExamples
 #endif
             //Prepare our string builder for assert results without "DifferentFirstPageHeaderFooter"
             logger.ClearText();
-            
+
             //Remove special first page
             //The order for this: primary header, default header, primary footer, default footer, even header\footer
             firstPageSection.PageSetup.DifferentFirstPageHeaderFooter = false;
@@ -174,9 +173,9 @@ namespace ApiExamples
 
         private class ReplaceLog : IReplacingCallback
         {
-            public ReplaceAction Replacing(ReplacingArgs e)
+            public ReplaceAction Replacing(ReplacingArgs args)
             {
-                _textBuilder.AppendLine(e.MatchNode.GetText());
+                _textBuilder.AppendLine(args.MatchNode.GetText());
                 return ReplaceAction.Skip;
             }
 
@@ -230,7 +229,8 @@ namespace ApiExamples
             // Insert absolutely positioned image into the top/left corner of the header.
             // Distance from the top/left edges of the page is set to 10 points.
             string imageFileName = ImageDir + "Aspose.Words.gif";
-            builder.InsertImage(imageFileName, RelativeHorizontalPosition.Page, 10, RelativeVerticalPosition.Page, 10, 50, 50, WrapType.Through);
+            builder.InsertImage(imageFileName, RelativeHorizontalPosition.Page, 10, RelativeVerticalPosition.Page, 10,
+                50, 50, WrapType.Through);
 
             builder.ParagraphFormat.Alignment = ParagraphAlignment.Right;
             // Specify another header title for other pages.
@@ -249,7 +249,7 @@ namespace ApiExamples
             builder.InsertCell();
 
             // Set first cell to 1/3 of the page width.
-            builder.CellFormat.PreferredWidth = PreferredWidth.FromPercent(100 / 3);
+            builder.CellFormat.PreferredWidth = PreferredWidth.FromPercent(100.0F / 3);
 
             // Insert page numbering text here.
             // It uses PAGE and NUMPAGES fields to auto calculate current page number and total number of pages.
@@ -263,7 +263,7 @@ namespace ApiExamples
 
             builder.InsertCell();
             // Set the second cell to 2/3 of the page width.
-            builder.CellFormat.PreferredWidth = PreferredWidth.FromPercent(100 * 2 / 3);
+            builder.CellFormat.PreferredWidth = PreferredWidth.FromPercent(100.0F * 2 / 3);
 
             builder.Write("(C) 2001 Aspose Pty Ltd. All rights reserved.");
 
@@ -307,8 +307,8 @@ namespace ApiExamples
             HeaderFooter primaryFooter = currentSection.HeadersFooters[HeaderFooterType.FooterPrimary];
 
             Row row = primaryFooter.Tables[0].FirstRow;
-            row.FirstCell.CellFormat.PreferredWidth = PreferredWidth.FromPercent(100 / 3);
-            row.LastCell.CellFormat.PreferredWidth = PreferredWidth.FromPercent(100 * 2 / 3);
+            row.FirstCell.CellFormat.PreferredWidth = PreferredWidth.FromPercent(100.0F / 3);
+            row.LastCell.CellFormat.PreferredWidth = PreferredWidth.FromPercent(100.0F * 2 / 3);
 
             // Save the resulting document.
             doc.Save(ArtifactsDir + "HeaderFooter.Primer.doc");
@@ -319,16 +319,19 @@ namespace ApiExamples
         /// </summary>
         private static void CopyHeadersFootersFromPreviousSection(Section section)
         {
-            Section previousSection = (Section)section.PreviousSibling;
+            Section previousSection = (Section) section.PreviousSibling;
 
             if (previousSection == null)
                 return;
 
             section.HeadersFooters.Clear();
 
-            foreach (HeaderFooter headerFooter in previousSection.HeadersFooters)
+            foreach (HeaderFooter headerFooter in previousSection.HeadersFooters.OfType<HeaderFooter>())
+            {
                 section.HeadersFooters.Add(headerFooter.Clone(true));
+            }
         }
+
         //ExEnd
     }
 }

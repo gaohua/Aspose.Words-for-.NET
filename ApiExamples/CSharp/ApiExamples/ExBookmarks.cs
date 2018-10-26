@@ -168,10 +168,10 @@ namespace ApiExamples
             // An empty document has just one empty paragraph by default.
             Paragraph p = doc.FirstSection.Body.FirstParagraph;
 
-            p.AppendChild(new Run(doc, "Text before bookmark. "));
+            p.AppendChild(new Run(doc, "Text before bookmark."));
 
             p.AppendChild(new BookmarkStart(doc, "My bookmark"));
-            p.AppendChild(new Run(doc, "Text inside bookmark. "));
+            p.AppendChild(new Run(doc, "Text inside bookmark."));
             p.AppendChild(new BookmarkEnd(doc, "My bookmark"));
 
             p.AppendChild(new Run(doc, "Text after bookmark."));
@@ -179,7 +179,7 @@ namespace ApiExamples
             doc.Save(ArtifactsDir + "Bookmarks.CreateBookmarkWithNodes.doc");
             //ExEnd
 
-            Assert.AreEqual(doc.Range.Bookmarks["My bookmark"].Text, "Text inside bookmark. ");
+            Assert.AreEqual("Text inside bookmark.", doc.Range.Bookmarks["My bookmark"].Text);
         }
 
         [Test]
@@ -243,7 +243,7 @@ namespace ApiExamples
 
             Assert.AreEqual(2, bookmarks.Count);
 
-            //Assert that all the bookmarks title are with whitespaces
+            // Assert that all the bookmarks title are with whitespaces
             Assert.AreEqual("My Bookmark", bookmarks[0].Title);
             Assert.AreEqual("Nested Bookmark", bookmarks[1].Title);
 #endif
@@ -258,6 +258,8 @@ namespace ApiExamples
         //ExFor:BookmarkStart.GetText
         //ExFor:BookmarkStart.Name
         //ExFor:BookmarkEnd.Name
+        //ExFor:DocumentVisitor.VisitBookmarkStart 
+        //ExFor:DocumentVisitor.VisitBookmarkEnd
         //ExSummary:Shows how add bookmarks and update their contents.
         [Test] //ExSkip
         public void CreateUpdateAndPrintBookmarks()
@@ -306,7 +308,7 @@ namespace ApiExamples
         {
             // Create a DocumentVisitor
             BookmarkInfoPrinter bookmarkVisitor = new BookmarkInfoPrinter();
-            
+
             // Get the enumerator from the document's BookmarkCollection and iterate over the bookmarks
             using (IEnumerator<Bookmark> enumerator = bookmarks.GetEnumerator())
             {
@@ -334,7 +336,8 @@ namespace ApiExamples
         {
             public override VisitorAction VisitBookmarkStart(BookmarkStart bookmarkStart)
             {
-                Console.WriteLine("BookmarkStart name: \"{0}\", Content: \"{1}\"", bookmarkStart.Name, bookmarkStart.Bookmark.Text);
+                Console.WriteLine("BookmarkStart name: \"{0}\", Content: \"{1}\"", bookmarkStart.Name,
+                    bookmarkStart.Bookmark.Text);
                 return VisitorAction.Continue;
             }
 

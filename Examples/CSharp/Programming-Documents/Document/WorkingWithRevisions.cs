@@ -2,6 +2,7 @@
 using System.IO;
 using Aspose.Words;
 using System;
+using Aspose.Words.Layout;
 
 namespace Aspose.Words.Examples.CSharp.Programming_Documents.Working_With_Document
 {
@@ -13,6 +14,8 @@ namespace Aspose.Words.Examples.CSharp.Programming_Documents.Working_With_Docume
             string dataDir = RunExamples.GetDataDir_WorkingWithDocument();
             AcceptRevisions(dataDir);
             GetRevisionTypes(dataDir);
+            GetRevisionGroups(dataDir);
+            SetShowCommentsinPDF(dataDir);
         }
 
         private static void AcceptRevisions(string dataDir)
@@ -47,6 +50,48 @@ namespace Aspose.Words.Examples.CSharp.Programming_Documents.Working_With_Docume
                     Console.WriteLine("The paragraph {0} has been moved (inserted).", i);
             }
             // ExEnd:GetRevisionTypes
+        }
+
+
+        private static void GetRevisionGroups(string dataDir)
+        {
+            // ExStart:GetRevisionGroups
+            Document doc = new Document(dataDir + "Revisions.docx");
+
+            foreach (RevisionGroup group in doc.Revisions.Groups)
+            {
+                Console.WriteLine("{0}, {1}:", group.Author, group.RevisionType);
+                Console.WriteLine(group.Text);
+            }
+            // ExEnd:GetRevisionGroups
+        }
+
+        private static void SetShowCommentsinPDF(string dataDir)
+        {
+            // ExStart:SetShowCommentsinPDF
+            Document doc = new Document(dataDir + "Revisions.docx");
+
+            //Do not render the comments in PDF
+            doc.LayoutOptions.ShowComments = false;
+            doc.Save(dataDir + "RemoveCommentsinPDF_out.pdf");
+            // ExEnd:SetShowCommentsinPDF
+            Console.WriteLine("\nFile saved at " + dataDir);
+        }
+
+        private static void SetShowInBalloons(string dataDir)
+        {
+            // ExStart:SetShowInBalloons
+            Document doc = new Document(dataDir + "Revisions.docx");
+
+            // Renders insert and delete revisions inline, format revisions in balloons.
+            doc.LayoutOptions.RevisionOptions.ShowInBalloons = ShowInBalloons.Format;
+
+            // Renders insert revisions inline, delete and format revisions in balloons.
+            //doc.LayoutOptions.RevisionOptions.ShowInBalloons = ShowInBalloons.FormatAndDelete;
+
+            doc.Save(dataDir + "SetShowInBalloons_out.pdf");
+            // ExEnd:SetShowInBalloons
+            Console.WriteLine("\nFile saved at " + dataDir);
         }
     }
 }

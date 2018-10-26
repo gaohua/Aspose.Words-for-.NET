@@ -59,12 +59,14 @@ namespace ApiExamples
             // All the necessary preparation will be done in a custom document visitor that we will accept
             BuildingBlockVisitor visitor = new BuildingBlockVisitor(glossaryDoc);
             block.Accept(visitor);
-            
+
             // We can find the block we made in the glossary document like this
-            BuildingBlock customBlock = glossaryDoc.GetBuildingBlock(BuildingBlockGallery.QuickParts, "My custom building blocks", "Custom Block");
+            BuildingBlock customBlock = glossaryDoc.GetBuildingBlock(BuildingBlockGallery.QuickParts,
+                "My custom building blocks", "Custom Block");
 
             // Our block contains one section which now contains our text
-            Assert.AreEqual("Text inside " + customBlock.Name + '\f', customBlock.FirstSection.Body.FirstParagraph.GetText());
+            Assert.AreEqual("Text inside " + customBlock.Name + '\f',
+                customBlock.FirstSection.Body.FirstParagraph.GetText());
             Assert.AreEqual(customBlock.FirstSection, customBlock.LastSection);
 
             Assert.AreNotEqual("00000000-0000-0000-0000-000000000000", customBlock.Guid.ToString());
@@ -96,7 +98,8 @@ namespace ApiExamples
                 // Change values by default of created BuildingBlock
                 block.Behavior = BuildingBlockBehavior.Paragraph;
                 block.Category = "My custom building blocks";
-                block.Description = "Using this block in the Quick Parts section of word will place its contents at the cursor.";
+                block.Description =
+                    "Using this block in the Quick Parts section of word will place its contents at the cursor.";
                 block.Gallery = BuildingBlockGallery.QuickParts;
 
                 block.Guid = Guid.NewGuid();
@@ -140,6 +143,10 @@ namespace ApiExamples
         //ExFor:BuildingBlocks.BuildingBlockCollection.Item(System.Int32)
         //ExFor:BuildingBlocks.BuildingBlockCollection.ToArray
         //ExFor:BuildingBlocks.BuildingBlockGallery
+        //ExFor:DocumentVisitor.VisitBuildingBlockEnd(BuildingBlock)
+        //ExFor:DocumentVisitor.VisitBuildingBlockStart(BuildingBlock)
+        //ExFor:DocumentVisitor.VisitGlossaryDocumentEnd(GlossaryDocument)
+        //ExFor:DocumentVisitor.VisitGlossaryDocumentStart(GlossaryDocument)
         //ExSummary:Shows how to use GlossaryDocument and BuildingBlockCollection.
         [Test] //ExSkip
         public void GlossaryDocument()
@@ -156,7 +163,7 @@ namespace ApiExamples
             Assert.AreEqual(5, glossaryDoc.BuildingBlocks.Count);
 
             doc.GlossaryDocument = glossaryDoc;
-            
+
             // There is a different ways how to get created building blocks
             Assert.AreEqual("Block 1", glossaryDoc.FirstBuildingBlock.Name);
             Assert.AreEqual("Block 2", glossaryDoc.BuildingBlocks[1].Name);
@@ -164,7 +171,8 @@ namespace ApiExamples
             Assert.AreEqual("Block 5", glossaryDoc.LastBuildingBlock.Name);
 
             // Get a block by gallery, category and name
-            BuildingBlock block4 = glossaryDoc.GetBuildingBlock(BuildingBlockGallery.All, "(Empty Category)", "Block 4");
+            BuildingBlock block4 =
+                glossaryDoc.GetBuildingBlock(BuildingBlockGallery.All, "(Empty Category)", "Block 4");
 
             // All GUIDs are the same by default
             Assert.AreEqual("00000000-0000-0000-0000-000000000000", block4.Guid.ToString());
@@ -203,6 +211,19 @@ namespace ApiExamples
                 return mBlocksByGuid;
             }
 
+            public override VisitorAction VisitGlossaryDocumentStart(GlossaryDocument glossary)
+            {
+                mBuilder.AppendLine("Glossary documnent found!");
+                return VisitorAction.Continue;
+            }
+
+            public override VisitorAction VisitGlossaryDocumentEnd(GlossaryDocument glossary)
+            {
+                mBuilder.AppendLine("Reached end of glossary!");
+                mBuilder.AppendLine("BuildingBlocks found: " + mBlocksByGuid.Count);
+                return VisitorAction.Continue;
+            }
+
             public override VisitorAction VisitBuildingBlockStart(BuildingBlock block)
             {
                 block.Guid = Guid.NewGuid();
@@ -212,25 +233,19 @@ namespace ApiExamples
 
             public override VisitorAction VisitBuildingBlockEnd(BuildingBlock block)
             {
-                mBuilder.Append("\tVisited " + block.Name + "\r\n");
-                return VisitorAction.Continue;
-            }
+                mBuilder.AppendLine("\tVisited block \"" + block.Name + "\"");
+                mBuilder.AppendLine("\t Type: " + block.Type);
+                mBuilder.AppendLine("\t Gallery: " + block.Gallery);
+                mBuilder.AppendLine("\t Behavior: " + block.Behavior);
+                mBuilder.AppendLine("\t Description: " + block.Description);
 
-            public override VisitorAction VisitGlossaryDocumentStart(GlossaryDocument glossary)
-            {
-                mBuilder.Append("Glossary processing started...\r\n");
-                return VisitorAction.Continue;
-            }
-
-            public override VisitorAction VisitGlossaryDocumentEnd(GlossaryDocument glossary)
-            {
-                mBuilder.Append("Reached end of glossary!\r\nBuildingBlocks found: " + mBlocksByGuid.Count);
                 return VisitorAction.Continue;
             }
 
             private readonly Dictionary<Guid, BuildingBlock> mBlocksByGuid;
             private readonly StringBuilder mBuilder;
         }
+
         //ExEnd
     }
 }

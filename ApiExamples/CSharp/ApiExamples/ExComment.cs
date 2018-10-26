@@ -7,6 +7,7 @@
 
 using System;
 using System.IO;
+using System.Linq;
 using Aspose.Words;
 using NUnit.Framework;
 
@@ -27,14 +28,14 @@ namespace ApiExamples
             Document doc = new Document();
             DocumentBuilder builder = new DocumentBuilder(doc);
 
-            //Create new comment
+            // Create new comment
             Comment newComment = new Comment(doc, "John Doe", "J.D.", DateTime.Now);
             newComment.SetText("My comment.");
 
-            //Add this comment to a document node
+            // Add this comment to a document node
             builder.CurrentParagraph.AppendChild(newComment);
 
-            //Add comment reply
+            // Add comment reply
             newComment.AddReply("John Doe", "JD", new DateTime(2017, 9, 25, 12, 15, 0), "New reply");
             //ExEnd
 
@@ -43,7 +44,7 @@ namespace ApiExamples
                 doc.Save(dstStream, SaveFormat.Docx);
             }
 
-            Comment docComment = (Comment)doc.GetChild(NodeType.Comment, 0, true);
+            Comment docComment = (Comment) doc.GetChild(NodeType.Comment, 0, true);
 
             Assert.AreEqual(1, docComment.Count);
             Assert.AreEqual(1, newComment.Replies.Count);
@@ -61,13 +62,13 @@ namespace ApiExamples
             //ExSummary:Shows how to get all comments with all replies.
             Document doc = new Document(MyDir + "Comment.Document.docx");
 
-            //Get all comment from the document
+            // Get all comment from the document
             NodeCollection comments = doc.GetChildNodes(NodeType.Comment, true);
 
-            Assert.AreEqual(12, comments.Count);//ExSkip
+            Assert.AreEqual(12, comments.Count); //ExSkip
 
-            //For all comments and replies we identify comment level and info about it
-            foreach (Comment comment in comments)
+            // For all comments and replies we identify comment level and info about it
+            foreach (Comment comment in comments.OfType<Comment>())
             {
                 if (comment.Ancestor == null)
                 {
@@ -76,7 +77,7 @@ namespace ApiExamples
                     Console.WriteLine("Comment author: " + comment.Author);
                     Console.WriteLine("Comment text: " + comment.GetText());
 
-                    foreach (Comment commentReply in comment.Replies)
+                    foreach (Comment commentReply in comment.Replies.OfType<Comment>())
                     {
                         Console.WriteLine("This is a comment reply\n");
 
@@ -85,6 +86,7 @@ namespace ApiExamples
                     }
                 }
             }
+
             //ExEnd
         }
 
@@ -97,7 +99,7 @@ namespace ApiExamples
             Document doc = new Document(MyDir + "Comment.Document.docx");
 
             NodeCollection comments = doc.GetChildNodes(NodeType.Comment, true);
-            Comment comment = (Comment)comments[0];
+            Comment comment = (Comment) comments[0];
 
             comment.RemoveAllReplies();
             //ExEnd
@@ -113,7 +115,7 @@ namespace ApiExamples
 
             NodeCollection comments = doc.GetChildNodes(NodeType.Comment, true);
 
-            Comment parentComment = (Comment)comments[0];
+            Comment parentComment = (Comment) comments[0];
 
             // Remove the first reply to comment
             parentComment.RemoveReply(parentComment.Replies[0]);
@@ -129,17 +131,17 @@ namespace ApiExamples
             Document doc = new Document(MyDir + "Comment.Document.docx");
 
             NodeCollection comments = doc.GetChildNodes(NodeType.Comment, true);
+            Comment comment = (Comment) comments[0];
 
-            Comment comment = (Comment)comments[0];
-
-            foreach (Comment childComment in comment.Replies)
+            foreach (Comment childComment in comment.Replies.OfType<Comment>())
             {
-                if (childComment.Done == false)
+                if (!childComment.Done)
                 {
                     // Update comment reply Done mark.
                     childComment.Done = true;
                 }
             }
+
             //ExEnd
         }
     }

@@ -7,9 +7,11 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading;
@@ -46,7 +48,7 @@ namespace ApiExamples
             //ExFor:License.#ctor
             //ExFor:License.SetLicense(String)
             //ExId:LicenseFromFileNoPath
-            //ExSummary:In this example Aspose.Words will attempt to find the license file in the embedded resources or in the assembly folders.
+            //ExSummary:Aspose.Words will attempt to find the license file in the embedded resources or in the assembly folders.
             License license = new License();
             license.SetLicense("Aspose.Words.lic");
             //ExEnd
@@ -145,7 +147,6 @@ namespace ApiExamples
             //ExFor:LoadOptions.BaseUri
             //ExId:DocumentCtor_LoadOptions
             //ExSummary:Opens an HTML document with images from a stream using a base URI.
-            Document doc;
             // We are opening this HTML file:      
             //    <html>
             //    <body>
@@ -154,7 +155,6 @@ namespace ApiExamples
             //    </body>
             //    </html>
             String fileName = MyDir + "Document.OpenFromStreamWithBaseUri.html";
-
             // Open the stream.
             using (Stream stream = File.OpenRead(fileName))
             {
@@ -172,8 +172,7 @@ namespace ApiExamples
 
             // Lets make sure the image was imported successfully into a Shape node.
             // Get the first shape node in the document.
-            Shape shape = (Shape)doc.GetChild(NodeType.Shape, 0, true);
-
+            Shape shape = (Shape) doc.GetChild(NodeType.Shape, 0, true);
             // Verify some properties of the image.
             Assert.IsTrue(shape.IsImage);
             Assert.IsNotNull(shape.ImageData.ImageBytes);
@@ -188,26 +187,26 @@ namespace ApiExamples
             //ExFor:Document.#ctor(Stream)
             //ExSummary:Retrieves a document from a URL and saves it to disk in a different format.
             // This is the URL address pointing to where to find the document.
-            String url = "https://www.google.ru/url?sa=t&rct=j&q=&esrc=s&source=web&cd=1&cad=rja&uact=8&ved=0ahUKEwjt_ZaU79XRAhUiJpoKHYPhAg4QFggaMAA&url=http%3A%2F%2Fdownload.microsoft.com%2Fdownload%2Ff%2F7%2F3%2Ff7395ee6-5642-4ab9-a881-786d0350e88d%2Fskills_development_white_paper_2009.doc&usg=AFQjCNHgXtYDBC_VAqdgqHNdaIQDzyXNpA&sig2=NqLNmbht9qC028yevlBvEg&bvm=bv.144224172,d.bGs";
-
+            String url = "https://is.gd/URJluZ";
             // The easiest way to load our document from the internet is make use of the 
             // System.Net.WebClient class. Create an instance of it and pass the URL
             // to download from.
-            WebClient webClient = new WebClient();
-
-            // Download the bytes from the location referenced by the URL.
-            byte[] dataBytes = webClient.DownloadData(url);
-
-            // Wrap the bytes representing the document in memory into a MemoryStream object.
-            using (MemoryStream byteStream = new MemoryStream(dataBytes))
+            using (WebClient webClient = new WebClient())
             {
-                // Load this memory stream into a new Aspose.Words Document.
-                // The file format of the passed data is inferred from the content of the bytes itself. 
-                // You can load any document format supported by Aspose.Words in the same way.
-                Document doc = new Document(byteStream);
+                // Download the bytes from the location referenced by the URL.
+                byte[] dataBytes = webClient.DownloadData(url);
 
-                // Convert the document to any format supported by Aspose.Words.
-                doc.Save(ArtifactsDir + "Document.OpenFromWeb.docx");
+                // Wrap the bytes representing the document in memory into a MemoryStream object.
+                using (MemoryStream byteStream = new MemoryStream(dataBytes))
+                {
+                    // Load this memory stream into a new Aspose.Words Document.
+                    // The file format of the passed data is inferred from the content of the bytes itself. 
+                    // You can load any document format supported by Aspose.Words in the same way.
+                    Document doc = new Document(byteStream);
+
+                    // Convert the document to any format supported by Aspose.Words.
+                    doc.Save(MyDir + @"\Artifacts\Document.OpenFromWeb.docx");
+                }
             }
             //ExEnd
         }
@@ -298,6 +297,43 @@ namespace ApiExamples
             {
                 Document doc = new Document(stream, new LoadOptions("qwerty"));
             }
+            //ExEnd
+        }
+
+        [Test] 
+        public void AnnotationsAtBlockLevel()
+        {
+            //ExStart
+            //ExFor:LoadOptions.AnnotationsAtBlockLevel
+            //ExSummary:Shows how to place bookmark nodes on the block, cell and row levels.
+            LoadOptions loadOptions = new LoadOptions { AnnotationsAtBlockLevel = true };
+
+            Document doc = new Document(MyDir + "Document.AnnotationsAtBlockLevel.docx", loadOptions);
+            DocumentBuilder builder = new DocumentBuilder(doc);
+
+            StructuredDocumentTag sdt = (StructuredDocumentTag)doc.GetChildNodes(NodeType.StructuredDocumentTag, true)[1];
+
+            BookmarkStart start = builder.StartBookmark("bm");
+            BookmarkEnd end = builder.EndBookmark("bm");
+
+            sdt.ParentNode.InsertBefore(start, sdt);
+            sdt.ParentNode.InsertAfter(end, sdt);
+
+            doc.Save(MyDir + @"\Artifacts\Document.AnnotationsAtBlockLevel.docx", SaveFormat.Docx);
+            //ExEnd
+        }
+
+        [Test]
+        public void ConvertShapeToOfficeMath()
+        {
+            //ExStart
+            //ExFor:LoadOptions.ConvertShapeToOfficeMath
+            //ExSummary:Shows how to convert shapes with EquationXML to Office Math objects.
+            LoadOptions loadOptions = new LoadOptions { ConvertShapeToOfficeMath = false };
+
+            // Specify load option to convert math shapes to office math objects on loading stage.
+            Document doc = new Document(MyDir + "Document.ConvertShapeToOfficeMath.docx", loadOptions);
+            doc.Save(MyDir + @"\Artifacts\Document.ConvertShapeToOfficeMath.docx", SaveFormat.Docx);
             //ExEnd
         }
 
@@ -486,7 +522,7 @@ namespace ApiExamples
         //ExFor:FontSavingArgs.FontFileName
         //ExId:SaveHtmlExportFonts
         //ExSummary:Shows how to define custom logic for handling font exporting when saving to HTML based formats.
-        [Test]//ExSkip
+        [Test] //ExSkip
         public void SaveHtmlExportFonts()
         {
             Document doc = new Document(MyDir + "Document.doc");
@@ -519,7 +555,7 @@ namespace ApiExamples
         //ExFor:HtmlSaveOptions.ImageSavingCallback
         //ExId:SaveHtmlCustomExport
         //ExSummary:Shows how to define custom logic for controlling how images are saved when exporting to HTML based formats.
-        [Test]//ExSkip
+        [Test] //ExSkip
         public void SaveHtmlExportImages()
         {
             Document doc = new Document(MyDir + "Document.doc");
@@ -533,11 +569,11 @@ namespace ApiExamples
 
         public class HandleImageSaving : IImageSavingCallback
         {
-            void IImageSavingCallback.ImageSaving(ImageSavingArgs e)
+            void IImageSavingCallback.ImageSaving(ImageSavingArgs args)
             {
                 // Change any images in the document being exported with the extension of "jpeg" to "jpg".
-                if (e.ImageFileName.EndsWith(".jpeg"))
-                    e.ImageFileName = e.ImageFileName.Replace(".jpeg", ".jpg");
+                if (args.ImageFileName.EndsWith(".jpeg"))
+                    args.ImageFileName = args.ImageFileName.Replace(".jpeg", ".jpg");
             }
         }
         //ExEnd
@@ -553,7 +589,7 @@ namespace ApiExamples
         //ExFor:DocumentBase.NodeChangingCallback
         //ExId:NodeChangingInDocument
         //ExSummary:Shows how to implement custom logic over node insertion in the document by changing the font of inserted HTML content.
-        [Test]//ExSkip
+        [Test] //ExSkip
         public void TestNodeChangingInDocument()
         {
             // Create a blank document object
@@ -569,7 +605,7 @@ namespace ApiExamples
             doc.Save(ArtifactsDir + "Document.FontChanger.doc");
 
             // Check that the inserted content has the correct formatting
-            Run run = (Run)doc.GetChild(NodeType.Run, 0, true);
+            Run run = (Run) doc.GetChild(NodeType.Run, 0, true);
             Assert.AreEqual(24.0, run.Font.Size);
             Assert.AreEqual("Arial", run.Font.Name);
         }
@@ -582,7 +618,7 @@ namespace ApiExamples
                 // Change the font of inserted text contained in the Run nodes.
                 if (args.Node.NodeType == NodeType.Run)
                 {
-                    Aspose.Words.Font font = ((Run)args.Node).Font;
+                    Aspose.Words.Font font = ((Run) args.Node).Font;
                     font.Size = 24;
                     font.Name = "Arial";
                 }
@@ -690,6 +726,7 @@ namespace ApiExamples
             //ExSummary:Shows how to append a document to the end of another document.
             // The document that the content will be appended to.
             Document dstDoc = new Document(MyDir + "Document.doc");
+            
             // The document to append.
             Document srcDoc = new Document(MyDir + "DocumentBuilder.doc");
 
@@ -712,6 +749,7 @@ namespace ApiExamples
             //ExSummary:Shows how to join multiple documents together.
             // The document that the other documents will be appended to.
             Document doc = new Document();
+            
             // We should call this method to clear this document of any existing content.
             doc.RemoveAllChildren();
 
@@ -721,7 +759,8 @@ namespace ApiExamples
                 Document srcDoc = new Document();
 
                 // Open the document to join.
-                Assert.That(() => srcDoc == new Document(@"C:\DetailsList.doc"), Throws.TypeOf<FileNotFoundException>());
+                Assert.That(() => srcDoc == new Document(@"C:\DetailsList.doc"),
+                    Throws.TypeOf<FileNotFoundException>());
 
                 // Append the source document at the end of the destination document.
                 doc.AppendDocument(srcDoc, ImportFormatMode.UseDestinationStyles);
@@ -732,27 +771,10 @@ namespace ApiExamples
                 // If this is the second document or above being appended then unlink all headers footers in this section 
                 // from the headers and footers of the previous section.
                 if (i > 1)
-                    Assert.That(() => doc.Sections[i].HeadersFooters.LinkToPrevious(false), Throws.TypeOf<NullReferenceException>());
+                    Assert.That(() => doc.Sections[i].HeadersFooters.LinkToPrevious(false),
+                        Throws.TypeOf<NullReferenceException>());
             }
-            //ExEnd
-        }
 
-        [Test]
-        public void DetectDocumentSignatures()
-        {
-            //ExStart
-            //ExFor:FileFormatUtil.DetectFileFormat(String)
-            //ExFor:FileFormatInfo.HasDigitalSignature
-            //ExId:DetectDocumentSignatures
-            //ExSummary:Shows how to check a document for digital signatures before loading it into a Document object.
-            // The path to the document which is to be processed.
-            String filePath = MyDir + "Document.Signed.docx";
-
-            FileFormatInfo info = FileFormatUtil.DetectFileFormat(filePath);
-            if (info.HasDigitalSignature)
-            {
-                Console.WriteLine("Document {0} has digital signatures, they will be lost if you open/save this document with Aspose.Words.", Path.GetFileName(filePath));
-            }
             //ExEnd
         }
 
@@ -798,10 +820,11 @@ namespace ApiExamples
             {
                 Console.WriteLine("*** Signature Found ***");
                 Console.WriteLine("Is valid: " + signature.IsValid);
-                Console.WriteLine("Reason for signing: " + signature.Comments); // This property is available in MS Word documents only.
-                Console.WriteLine("Signature type: " + signature.SignatureType.ToString());
+                Console.WriteLine("Reason for signing: " +
+                                  signature.Comments); // This property is available in MS Word documents only.
+                Console.WriteLine("Signature type: " + signature.SignatureType);
                 Console.WriteLine("Time of signing: " + signature.SignTime);
-                Console.WriteLine("Subject name: " + signature.CertificateHolder.Certificate.SubjectName.ToString());
+                Console.WriteLine("Subject name: " + signature.CertificateHolder.Certificate.SubjectName);
                 Console.WriteLine("Issuer name: " + signature.CertificateHolder.Certificate.IssuerName.Name);
                 Console.WriteLine();
             }
@@ -812,7 +835,8 @@ namespace ApiExamples
             Assert.AreEqual("Test Sign", digitalSig.Comments);
             Assert.AreEqual("XmlDsig", digitalSig.SignatureType.ToString());
             Assert.True(digitalSig.CertificateHolder.Certificate.Subject.Contains("Aspose Pty Ltd"));
-            Assert.True(digitalSig.CertificateHolder.Certificate.IssuerName.Name != null && digitalSig.CertificateHolder.Certificate.IssuerName.Name.Contains("VeriSign"));
+            Assert.True(digitalSig.CertificateHolder.Certificate.IssuerName.Name != null &&
+                        digitalSig.CertificateHolder.Certificate.IssuerName.Name.Contains("VeriSign"));
         }
 
         [Test]
@@ -837,7 +861,8 @@ namespace ApiExamples
 
             // Pass the certificate and details to the save options class to sign with.
             PdfSaveOptions options = new PdfSaveOptions();
-            options.DigitalSignatureDetails = new PdfDigitalSignatureDetails(certificateHolder, "Test Signing", "Aspose Office", DateTime.Now);
+            options.DigitalSignatureDetails =
+                new PdfDigitalSignatureDetails(certificateHolder, "Test Signing", "Aspose Office", DateTime.Now);
 
             // Save the document as PDF with the digital signature set.
             doc.Save(ArtifactsDir + "Document.Signed.pdf", options);
@@ -868,7 +893,8 @@ namespace ApiExamples
 
             // Gather the files which will be appended to our template document.
             // In this case we add the optional parameter to include the search only for files with the ".doc" extension.
-            ArrayList files = new ArrayList(Directory.GetFiles(MyDir, "*.doc"));
+            ArrayList files = new ArrayList(Directory.GetFiles(MyDir, "*.doc")
+                .Where(file => file.EndsWith(".doc", StringComparison.CurrentCultureIgnoreCase)).ToArray());
             // The list of files may come in any order, let's sort the files by name so the documents are enumerated alphabetically.
             files.Sort();
 
@@ -982,7 +1008,7 @@ namespace ApiExamples
             // date formatting.
             CultureInfo currentCulture = Thread.CurrentThread.CurrentCulture;
             Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
-            doc.MailMerge.Execute(new String[] { "Date1" }, new object[] { new DateTime(2011, 1, 01) });
+            doc.MailMerge.Execute(new[] { "Date1" }, new object[] { new DateTime(2011, 1, 01) });
 
             //ExStart
             //ExFor:Document.FieldOptions
@@ -993,7 +1019,7 @@ namespace ApiExamples
             //ExSummary:Shows how to specify where the culture used for date formatting during field update and mail merge is chosen from.
             // Set the culture used during field update to the culture used by the field.
             doc.FieldOptions.FieldUpdateCultureSource = FieldUpdateCultureSource.FieldCode;
-            doc.MailMerge.Execute(new String[] { "Date2" }, new object[] { new DateTime(2011, 1, 01) });
+            doc.MailMerge.Execute(new[] { "Date2" }, new object[] { new DateTime(2011, 1, 01) });
             //ExEnd
 
             // Verify the field update behavior is correct.
@@ -1214,7 +1240,7 @@ namespace ApiExamples
             Document doc = new Document(MyDir + "Table.TableStyle.docx");
 
             // Get the first cell of the first table in the document.
-            Table table = (Table)doc.GetChild(NodeType.Table, 0, true);
+            Table table = (Table) doc.GetChild(NodeType.Table, 0, true);
             Cell firstCell = table.FirstRow.FirstCell;
 
             // First print the color of the cell shading. This should be empty as the current shading
@@ -1295,19 +1321,20 @@ namespace ApiExamples
             //ExSummary:Shows how to enumerate over document variables.
             Document doc = new Document(MyDir + "Document.doc");
 
-            foreach (DictionaryEntry entry in doc.Variables)
+            foreach (KeyValuePair<string, string> entry in doc.Variables)
             {
-                String name = entry.Key.ToString();
-                String value = entry.Value.ToString();
+                String name = entry.Key;
+                String value = entry.Value;
 
                 // Do something useful.
                 Console.WriteLine("Name: {0}, Value: {1}", name, value);
             }
+
             //ExEnd
         }
 
         [Test]
-        [Ignore("WORDSNET-16099")]
+        [Description("WORDSNET-16099")]
         public void SetFootnoteNumberOfColumns()
         {
             Document doc = new Document(MyDir + "Document.FootnoteEndnote.docx");
@@ -1450,17 +1477,30 @@ namespace ApiExamples
         {
             //ExStart
             //ExFor:CompareOptions.IgnoreFormatting
+            //ExFor:CompareOptions.IgnoreCaseChanges
+            //ExFor:CompareOptions.IgnoreComments
+            //ExFor:CompareOptions.IgnoreTables
+            //ExFor:CompareOptions.IgnoreFields
+            //ExFor:CompareOptions.IgnoreFootnotes
+            //ExFor:CompareOptions.IgnoreTextboxes
             //ExFor:CompareOptions.Target
             //ExFor:Document.Compare(Document, String, DateTime, CompareOptions)
             //ExSummary: Shows how to specify which document shall be used as a target during comparison
             Document doc1 = new Document(MyDir + "Document.CompareOptions.1.docx");
             Document doc2 = new Document(MyDir + "Document.CompareOptions.2.docx");
 
-            //ComparisonTargetType with IgnoreFormatting setting determines which document has to be used as formatting source for ranges of equal text.
-            Aspose.Words.CompareOptions compareOptions = new Aspose.Words.CompareOptions();
-            compareOptions.IgnoreFormatting = true;
-            compareOptions.Target = ComparisonTargetType.New;
-
+            // ComparisonTargetType with IgnoreFormatting setting determines which document has to be used as formatting source for ranges of equal text.
+            Aspose.Words.CompareOptions compareOptions = new Aspose.Words.CompareOptions
+            {
+                IgnoreFormatting = true,
+                IgnoreCaseChanges = true,
+                IgnoreComments = true,
+                IgnoreTables = true,
+                IgnoreFields = true,
+                IgnoreFootnotes = true,
+                IgnoreTextboxes = true,
+                Target = ComparisonTargetType.New
+            };
             doc1.Compare(doc2, "vderyushev", DateTime.Now, compareOptions);
 
             doc1.Save(ArtifactsDir + "Document.CompareOptions.docx");
@@ -1494,7 +1534,8 @@ namespace ApiExamples
             Document docWithRevision = new Document(MyDir + "Document.Compare.Revisions.doc");
 
             if (docWithRevision.Revisions.Count > 0)
-                Assert.That(() => docWithRevision.Compare(doc1, "authorName", DateTime.Now), Throws.TypeOf<InvalidOperationException>());
+                Assert.That(() => docWithRevision.Compare(doc1, "authorName", DateTime.Now),
+                    Throws.TypeOf<InvalidOperationException>());
         }
 
         [Test]
@@ -1520,9 +1561,11 @@ namespace ApiExamples
             //ExSummary:Shows how to remove all unused styles and lists from a document. 
             Document doc = new Document(MyDir + "Document.doc");
 
-            CleanupOptions cleanupOptions = new CleanupOptions();
-            cleanupOptions.UnusedLists = true;
-            cleanupOptions.UnusedStyles = true;
+            CleanupOptions cleanupOptions = new CleanupOptions
+            {
+                UnusedLists = true,
+                UnusedStyles = true
+            };
 
             doc.Cleanup(cleanupOptions);
             //ExEnd
@@ -1575,7 +1618,7 @@ namespace ApiExamples
             Document doc = new Document(MyDir + "ShowRevisionBalloons.docx");
 
             //Set option true, if you need render tracking changes in balloons in pdf document
-            doc.LayoutOptions.RevisionOptions.ShowRevisionBalloons = true;
+            doc.LayoutOptions.RevisionOptions.ShowInBalloons = ShowInBalloons.Format;
 
             //Check that revisions are in balloons 
             doc.Save(ArtifactsDir + "ShowRevisionBalloons.pdf");
@@ -1597,6 +1640,26 @@ namespace ApiExamples
             // Revisions will now show up as normal text in the output document.
             doc.AcceptAllRevisions();
             doc.Save(ArtifactsDir + "Document.AcceptedRevisions.doc");
+            //ExEnd
+        }
+
+        [Test]
+        public void RevisionHistory()
+        {
+            //ExStart
+            //ExFor:Paragraph.IsMoveFromRevision
+            //ExFor:Paragraph.IsMoveToRevision
+            //ExSummary:Shows how to get paragraph that was moved (deleted/inserted) in Microsoft Word while change tracking was enabled.
+            Document doc = new Document(MyDir + "Document.Revisions.docx");
+            ParagraphCollection paragraphs = doc.FirstSection.Body.Paragraphs;
+
+            for (int i = 0; i < paragraphs.Count; i++)
+            {
+                if (paragraphs[i].IsMoveFromRevision)
+                    Console.WriteLine("The paragraph {0} has been moved (deleted).", i);
+                if (paragraphs[i].IsMoveToRevision)
+                    Console.WriteLine("The paragraph {0} has been moved (inserted).", i);
+            }
             //ExEnd
         }
 
@@ -1634,7 +1697,11 @@ namespace ApiExamples
             //ExSummary:Shows how to configure document hyphenation options.
             Document doc = new Document();
             // Create new Run with text that we want to move to the next line using the hyphen
-            Run run = new Run(doc) { Text = "poqwjopiqewhpefobiewfbiowefob ewpj weiweohiewobew ipo efoiewfihpewfpojpief pijewfoihewfihoewfphiewfpioihewfoihweoihewfpj" };
+            Run run = new Run(doc)
+            {
+                Text =
+                    "poqwjopiqewhpefobiewfbiowefob ewpj weiweohiewobew ipo efoiewfihpewfpojpief pijewfoihewfihoewfphiewfpioihewfoihweoihewfpj"
+            };
 
             Paragraph para = doc.FirstSection.Body.Paragraphs[0];
             para.AppendChild(run);
@@ -1677,7 +1744,8 @@ namespace ApiExamples
             doc.HyphenationOptions.ConsecutiveHyphenLimit = 0;
             Assert.That(() => doc.HyphenationOptions.HyphenationZone = 0, Throws.TypeOf<ArgumentOutOfRangeException>());
 
-            Assert.That(() => doc.HyphenationOptions.ConsecutiveHyphenLimit = -1, Throws.TypeOf<ArgumentOutOfRangeException>());
+            Assert.That(() => doc.HyphenationOptions.ConsecutiveHyphenLimit = -1,
+                Throws.TypeOf<ArgumentOutOfRangeException>());
             doc.HyphenationOptions.HyphenationZone = 360;
         }
 
@@ -1688,8 +1756,7 @@ namespace ApiExamples
             //ExFor:PlainTextDocument.#ctor(String)
             //ExFor:PlainTextDocument.#ctor(String, LoadOptions)
             //ExSummary:Show how to simply extract text from a document.
-            LoadOptions loadOptions = new LoadOptions();
-            loadOptions.AllowTrailingWhitespaceForListItems = false;
+            TxtLoadOptions loadOptions = new TxtLoadOptions { DetectNumberingWithWhitespaces = false };
 
             PlainTextDocument plaintext = new PlainTextDocument(MyDir + "Bookmark.docx");
             Assert.AreEqual("This is a bookmarked text.\f", plaintext.Text); //ExSkip 
@@ -1732,8 +1799,7 @@ namespace ApiExamples
             //ExFor:PlainTextDocument.#ctor(Stream)
             //ExFor:PlainTextDocument.#ctor(Stream, LoadOptions)
             //ExSummary:Show how to simply extract text from a stream.
-            LoadOptions loadOptions = new LoadOptions();
-            loadOptions.AllowTrailingWhitespaceForListItems = false;
+            TxtLoadOptions loadOptions = new TxtLoadOptions { DetectNumberingWithWhitespaces = false };
 
             Stream stream = new FileStream(MyDir + "Bookmark.docx", FileMode.Open);
 
@@ -1845,7 +1911,7 @@ namespace ApiExamples
             Document doc = new Document();
             DocumentBuilder builder = new DocumentBuilder(doc);
 
-            builder.Writeln("This is the frst line.");
+            builder.Writeln("This is the first line.");
             builder.Writeln("This is the second line.");
             builder.Writeln("These three lines contain eighteen words in total.");
 
@@ -1894,7 +1960,7 @@ namespace ApiExamples
             // doc.Cleanup() removes all unused styles and lists
             doc.Cleanup();
 
-            // It currently has no effect becase the 2 items we added plus the original 4 styles are all used
+            // It currently has no effect because the 2 items we added plus the original 4 styles are all used
             Assert.AreEqual(5, doc.Styles.Count);
             Assert.AreEqual(1, doc.Lists.Count);
 
@@ -1998,7 +2064,7 @@ namespace ApiExamples
 
             // Empty Microsoft Word documents by default come with an attached template called "Normal.dotm"
             // There is no default template for Aspose Words documents
-            Assert.AreEqual(String.Empty, doc.AttachedTemplate);
+            Assert.AreEqual(string.Empty, doc.AttachedTemplate);
 
             // For AutomaticallyUpdateStyles to have any effect, we need a document with a template
             // We can make a document with word and open it
@@ -2007,7 +2073,7 @@ namespace ApiExamples
 
             Assert.IsTrue(doc.AttachedTemplate.EndsWith("Document.BusinessBrochureTemplate.dotx"));
 
-            // Any changes to the styes in this template will be propagated to those styles in the document
+            // Any changes to the styles in this template will be propagated to those styles in the document
             doc.AutomaticallyUpdateSyles = true;
 
             doc.Save(ArtifactsDir + "TemplateStylesUpdating.docx");
@@ -2019,7 +2085,7 @@ namespace ApiExamples
         {
             //ExStart
             //ExFor:Document.CompatibilityOptions
-            //ExSummary:Shows how to optimise our document for different word versions.
+            //ExSummary:Shows how to optimize our document for different word versions.
             Document doc = new Document();
             CompatibilityOptions co = doc.CompatibilityOptions;
 
@@ -2077,8 +2143,9 @@ namespace ApiExamples
             // We have a document with 2 sections, this way FirstSection and LastSection are not the same
             Assert.AreEqual(2, doc.Sections.Count);
 
-            string newCopyrightInformation = String.Format("Copyright (C) {0} by Aspose Pty Ltd.", DateTime.Now.Year);
-            FindReplaceOptions findReplaceOptions = new FindReplaceOptions { MatchCase = false, FindWholeWordsOnly = false };
+            string newCopyrightInformation = string.Format("Copyright (C) {0} by Aspose Pty Ltd.", DateTime.Now.Year);
+            FindReplaceOptions findReplaceOptions =
+                new FindReplaceOptions { MatchCase = false, FindWholeWordsOnly = false };
 
             // Access the first and the last sections
             HeaderFooter firstSectionFooter = doc.FirstSection.HeadersFooters[HeaderFooterType.FooterPrimary];
@@ -2106,10 +2173,10 @@ namespace ApiExamples
             // When creating a blank document, Aspose Words creates a default theme object
             Theme theme = doc.Theme;
 
-            // These colour properties correspond to the 10 colour columns that you see 
-            // in the "Theme colors" section in the colour selector menu when changing font or shading colour
-            // We can view and edit the leading colour for each column, and the five different tints that
-            // make up the rest of the column will be derived automatically from each leading colour
+            // These color properties correspond to the 10 color columns that you see 
+            // in the "Theme colors" section in the color selector menu when changing font or shading color
+            // We can view and edit the leading color for each column, and the five different tints that
+            // make up the rest of the column will be derived automatically from each leading color
             // Aspose Words sets the defaults to what they are in the Microsoft Word default theme
             Assert.AreEqual(Color.FromArgb(255, 255, 255, 255), theme.Colors.Light1);
             Assert.AreEqual(Color.FromArgb(255, 0, 0, 0), theme.Colors.Dark1);
@@ -2122,7 +2189,7 @@ namespace ApiExamples
             Assert.AreEqual(Color.FromArgb(255, 75, 172, 198), theme.Colors.Accent5);
             Assert.AreEqual(Color.FromArgb(255, 247, 150, 70), theme.Colors.Accent6);
 
-            // Hyperlink colours
+            // Hyperlink colors
             Assert.AreEqual(Color.FromArgb(255, 0, 0, 255), theme.Colors.Hyperlink);
             Assert.AreEqual(Color.FromArgb(255, 128, 0, 128), theme.Colors.FollowedHyperlink);
 
@@ -2160,7 +2227,6 @@ namespace ApiExamples
         public void SetInvalidateFieldTypes()
         {
             //ExStart
-            //ExFor:Document.InvalidateFieldTypes
             //ExFor:Document.NormalizeFieldTypes
             //ExSummary:Shows how to get the keep a field's type up to date with its field code.
             Document doc = new Document();
@@ -2174,11 +2240,11 @@ namespace ApiExamples
             Assert.AreEqual(1, doc.Range.Fields.Count);
 
             // We can manually access the content of the field we added and change it
-            Run fieldText = (Run)doc.FirstSection.Body.FirstParagraph.GetChildNodes(NodeType.Run, true)[0];
+            Run fieldText = (Run) doc.FirstSection.Body.FirstParagraph.GetChildNodes(NodeType.Run, true)[0];
             Assert.AreEqual("DATE", fieldText.Text);
             fieldText.Text = "PAGE";
-            
-            // We changed the text to "PAGE" but the field's type property did not update accoridngly
+
+            // We changed the text to "PAGE" but the field's type property did not update accordingly
             Assert.AreEqual("PAGE", fieldText.GetText());
             Assert.AreNotEqual(FieldType.FieldPage, field.Type);
 
@@ -2206,25 +2272,27 @@ namespace ApiExamples
             //ExSummary:Shows how to set a document's layout options.
             Document doc = new Document();
 
-            Assert.IsFalse(doc.LayoutOptions.IsShowHiddenText);
-            Assert.IsFalse(doc.LayoutOptions.IsShowParagraphMarks);
-            
+            Assert.IsFalse(doc.LayoutOptions.ShowHiddenText);
+            Assert.IsFalse(doc.LayoutOptions.ShowParagraphMarks);
+
             // The appearance of revisions can be controlled from the layout options property
             doc.StartTrackRevisions("John Doe", DateTime.Now);
             doc.LayoutOptions.RevisionOptions.InsertedTextColor = RevisionColor.BrightGreen;
             doc.LayoutOptions.RevisionOptions.ShowRevisionBars = false;
 
             DocumentBuilder builder = new DocumentBuilder(doc);
-            builder.Writeln("This is a revision. Normally the text is red with a bar to the left, but we made some changes to the revision options.");
+            builder.Writeln(
+                "This is a revision. Normally the text is red with a bar to the left, but we made some changes to the revision options.");
 
             doc.StopTrackRevisions();
 
             // Layout options can be used to show hidden text too
             builder.Writeln("This text is not hidden.");
             builder.Font.Hidden = true;
-            builder.Writeln("This text is hidden. It will only show up in the output if we allow it to via doc.LayoutOptions.");
+            builder.Writeln(
+                "This text is hidden. It will only show up in the output if we allow it to via doc.LayoutOptions.");
 
-            doc.LayoutOptions.IsShowHiddenText = true;
+            doc.LayoutOptions.ShowHiddenText = true;
 
             doc.Save(MyDir + @"\Artifacts\Document.LayoutOptions.pdf");
             //ExEnd
@@ -2261,7 +2329,7 @@ namespace ApiExamples
             mailMergeSettings.Query = "SELECT * FROM " + doc.MailMergeSettings.DataSource;
             mailMergeSettings.LinkToQuery = true;
             mailMergeSettings.ViewMergedData = true;
-            
+
             // Office Data Source Object settings
             Odso odso = mailMergeSettings.Odso;
             odso.DataSourceType = OdsoDataSourceType.Text;
@@ -2318,7 +2386,7 @@ namespace ApiExamples
 
             builder.Write("Text before bookmark. ");
 
-            builder.InsertTextInput("My bookmark", TextFormFieldType.Regular, "", 
+            builder.InsertTextInput("My bookmark", TextFormFieldType.Regular, "",
                 "If gray shading is turned on, this is the text that will have a gray background.", 0);
 
             // Our bookmarked text will appear gray here
@@ -2391,6 +2459,172 @@ namespace ApiExamples
 
             // We will still need the password if we want to open this one with Word
             docProtected.Save(ArtifactsDir + "Document.WriteProtectionEditedAfter.docx");
+            //ExEnd
+        }
+        
+        [Test]
+        public void AddEditingLanguage()
+        {
+            //ExStart
+            //ExFor:LanguagePreferences.AddEditingLanguage(EditingLanguage)
+            //ExSummary:Shows how to set up language preferences that will be used when document is loading
+            LoadOptions loadOptions = new LoadOptions();
+            loadOptions.LanguagePreferences.AddEditingLanguage(EditingLanguage.Japanese);
+            
+            Document doc = new Document(MyDir + "Document.EditingLanguage.docx", loadOptions);
+
+            int localeIdFarEast = doc.Styles.DefaultFont.LocaleIdFarEast;
+            if (localeIdFarEast == (int)EditingLanguage.Japanese)
+                Console.WriteLine("The document either has no any FarEast language set in defaults or it was set to Japanese originally.");
+            else
+                Console.WriteLine("The document default FarEast language was set to another than Japanese language originally, so it is not overridden.");
+            //ExEnd
+        }
+
+        [Test]
+        public void SetEditingLanguageAsDefault()
+        {
+            //ExStart
+            //ExFor:LanguagePreferences.SetAsDefault(EditingLanguage)
+            //ExSummary:Shows how to set language as default
+            LoadOptions loadOptions = new LoadOptions();
+            // You can set language which only
+            loadOptions.LanguagePreferences.DefaultEditingLanguage = EditingLanguage.Russian;
+
+            Document doc = new Document(MyDir + "Document.EditingLanguage.docx", loadOptions);
+
+            int localeId = doc.Styles.DefaultFont.LocaleId;
+            if (localeId == (int)EditingLanguage.Russian)
+                Console.WriteLine("The document either has no any language set in defaults or it was set to Russian originally.");
+            else
+                Console.WriteLine("The document default language was set to another than Russian language originally, so it is not overridden.");
+            //ExEnd
+        }
+
+        [Test]
+        public void GetInfoAboutRevisionsInRevisionGroups()
+        {
+            //ExStart
+            //ExFor:RevisionGroup.#ctor
+            //ExFor:RevisionGroup.Author
+            //ExFor:RevisionGroup.RevisionType
+            //ExFor:RevisionGroup.Text
+            //ExFor:RevisionGroupCollection.#ctor
+            //ExFor:RevisionGroupCollection.Count
+            //ExSummary:Shows how to get info about a set of revisions in document.
+            Document doc = new Document(MyDir + "Document.Revisions.docx");
+
+            Console.WriteLine("Revision groups count: {0}\n", doc.Revisions.Groups.Count);
+
+            // Get info about all of revisions in document
+            foreach (RevisionGroup group in doc.Revisions.Groups)
+            {
+                Console.WriteLine("Revision author: {0}; Revision type: {1} \nRevision text: {2}", group.Author,
+                    group.RevisionType, group.RevisionType);
+            }
+
+            //ExEnd
+        }
+
+        [Test]
+        public void GetSpecificRevisionGroup()
+        {
+            //ExStart
+            //ExFor:RevisionGroupCollection.#ctor
+            //ExFor:RevisionGroupCollection.Item(Int32)
+            //ExSummary:Shows how to get a set of revisions in document.
+            Document doc = new Document(MyDir + "Document.Revisions.docx");
+
+            // Get revision group by index.
+            RevisionGroup revisionGroup = doc.Revisions.Groups[1];
+
+            // Get info about specific revision groups sorted by RevisionType
+            IEnumerable<string> revisionGroupCollectionInsertionType =
+                doc.Revisions.Groups.Where(p => p.RevisionType == RevisionType.Insertion).Select(p =>
+                    string.Format("Revision type: {0},\nRevision author: {1},\nRevision text: {2}.\n",
+                        p.RevisionType.ToString(), p.Author, p.Text));
+
+            foreach (string revisionGroupInfo in revisionGroupCollectionInsertionType)
+            {
+                Console.WriteLine(revisionGroupInfo);
+            }
+            //ExEnd
+        }
+
+        [Test]
+        public void RemovePersonalInformation()
+        {
+            //ExStart
+            //ExFor:Document.RemovePersonalInformation
+            //ExSummary:Shows how to get or set a flag to remove all user information upon saving the MS Word document.
+            Document doc = new Document(MyDir + "Document.docx")
+            {
+                // If flag sets to 'true' that MS Word will remove all user information from comments, revisions and
+                // document properties upon saving the document. In MS Word 2013 and 2016 you can see this using
+                // File -> Options -> Trust Center -> Trust Center Settings -> Privacy Options -> then the
+                // checkbox "Remove personal information from file properties on save".
+                RemovePersonalInformation = true
+            };
+            
+            doc.Save(MyDir + @"\Artifacts\Document.RemovePersonalInformation.docx");
+        }
+
+        [Test]
+        public void ShowComments()
+        {
+            //ExStart
+            //ExFor:LayoutOptions.ShowComments
+            //ExSummary:Shows how to show or hide comments in PDF document.
+            Document doc = new Document(MyDir + "Comment.Document.docx");
+            
+            doc.LayoutOptions.ShowComments = false;
+            
+            doc.Save(MyDir + @"\Artifacts\Document.DoNotShowComments.pdf");
+            //ExEnd
+        }
+
+        [Test]
+        public void ShowRevisionsInBalloons()
+        {
+            //ExStart
+            //ExFor:ShowInBalloons
+            //ExFor:RevisionOptions.ShowInBalloons
+            //ExSummary:Show how to render revisions in the balloons.
+            Document doc = new Document(MyDir + "Document.Revisions.docx");
+            
+            doc.LayoutOptions.RevisionOptions.ShowInBalloons = ShowInBalloons.FormatAndDelete;
+  
+            doc.Save(MyDir + @"\Artifacts\Document.ShowRevisionsInBalloons.pdf");
+            //ExEnd
+        }
+
+        [Test]
+        public void CopyStylesFromTemplateViaDocument()
+        {
+            //ExStart
+            //ExFor:Document.CopyStylesFromTemplate(Document)
+            //ExSummary:Shows how to copies styles from the template to a document.
+            Document template = new Document(MyDir + "Rendering.doc");
+
+            Document target = new Document(MyDir + "Document.docx");
+            target.CopyStylesFromTemplate(template);
+
+            target.Save(MyDir + @"\Artifacts\CopyStylesFromTemplateViaDocument.docx");
+            //ExEnd
+        }
+
+        [Test]
+        public void CopyStylesFromTemplateViaString()
+        {
+            //ExStart
+            //ExFor:Document.CopyStylesFromTemplate(String)
+            //ExSummary:Shows how to copies styles from the template to a document.
+            string templatePath = MyDir + "Rendering.doc";
+            
+            Document target = new Document(MyDir + "Document.docx");
+            target.CopyStylesFromTemplate(templatePath);
+
+            target.Save(MyDir + @"\Artifacts\CopyStylesFromTemplateViaString.docx");
             //ExEnd
         }
     }

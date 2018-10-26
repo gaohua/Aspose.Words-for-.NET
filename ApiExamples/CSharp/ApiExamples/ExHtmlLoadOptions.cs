@@ -47,7 +47,7 @@ namespace ApiExamples
         {
             //ExStart
             //ExFor:HtmlLoadOptions.PreferredControlType
-            //ExSummary:Shows how to set preffered type of document nodes that will represent imported <input> and <select> elements.
+            //ExSummary:Shows how to set preferred type of document nodes that will represent imported <input> and <select> elements.
             const string html = @"
                 <html>
                     <select name='ComboBox' size='1'>
@@ -59,11 +59,11 @@ namespace ApiExamples
 
             HtmlLoadOptions htmlLoadOptions = new HtmlLoadOptions();
             htmlLoadOptions.PreferredControlType = HtmlControlType.StructuredDocumentTag;
-            
+
             Document doc = new Document(new MemoryStream(Encoding.UTF8.GetBytes(html)), htmlLoadOptions);
             NodeCollection nodes = doc.GetChildNodes(NodeType.StructuredDocumentTag, true);
-            
-            StructuredDocumentTag tag = (StructuredDocumentTag)nodes[0];
+
+            StructuredDocumentTag tag = (StructuredDocumentTag) nodes[0];
             //ExEnd
 
             Assert.AreEqual(2, tag.ListItems.Count);
@@ -90,7 +90,7 @@ namespace ApiExamples
 
             Assert.AreEqual(1, nodes.Count);
 
-            FormField formField = (FormField)nodes[0];
+            FormField formField = (FormField) nodes[0];
             Assert.AreEqual("Input value text", formField.Result);
         }
     }
