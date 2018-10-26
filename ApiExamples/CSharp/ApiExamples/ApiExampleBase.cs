@@ -27,6 +27,7 @@ namespace ApiExamples
             if (!CheckForSkipSetUp())
             {
                 SetUnlimitedLicense();
+            }
 
             if (!Directory.Exists(ArtifactsDir))
                 //Create new empty directory

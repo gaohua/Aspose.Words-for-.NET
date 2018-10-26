@@ -16,7 +16,6 @@ namespace ApiExamples
     [TestFixture]
     internal class ExHtmlSaveOptions : ApiExampleBase
     {
-        // Note: For assert this test you need to open HTML docs and they shouldn't have negative left margins
         [Test]
         [TestCase(SaveFormat.Html)]
         [TestCase(SaveFormat.Mhtml)]
@@ -47,10 +46,6 @@ namespace ApiExamples
 
             doc.Save(ArtifactsDir + "HtmlSaveOptions.ExportToHtmlUsingImage" + FileFormatUtil.SaveFormatToExtension(saveFormat), saveOptions);
         }
-
-        #endregion
-
-        #region ExportTextBoxAsSvg
 
         [Test]
         [TestCase(SaveFormat.Html, true, Description = "TextBox as svg (html)")]
@@ -85,12 +80,6 @@ namespace ApiExamples
 
                     dirFiles = Directory.GetFiles(ArtifactsDir, "HtmlSaveOptions.ExportTextBoxAsSvg.001.png", SearchOption.AllDirectories);
                     Assert.IsNotEmpty(dirFiles);
-                    return;
-
-                case SaveFormat.Epub:
-                    DocumentHelper.FindTextInFile(
-                        MyDir + @"\Artifacts\HtmlSaveOptions.ExportToHtmlUsingImage." + saveFormat.ToString().ToLower(),
-                        "<span style=\"font-family:\'Cambria Math\'\">A=π</span><span style=\"font-family:\'Cambria Math\'\">r</span><span style=\"font-family:\'Cambria Math\'\">2</span>");
                     return;
             }
         }
@@ -139,11 +128,8 @@ namespace ApiExamples
         {
             Document doc = new Document(MyDir + "HtmlSaveOptions.ExportPageMargins.docx");
             HtmlSaveOptions saveOptions = new HtmlSaveOptions { ExportRoundtripInformation = true };
-
-            HtmlSaveOptions saveOptions = new HtmlSaveOptions();
-            saveOptions.ExportRoundtripInformation = valueHtml;
-
-            doc.Save(ArtifactsDir + "HtmlSaveOptions.RoundtripInformation.html");
+            
+            doc.Save(ArtifactsDir + "HtmlSaveOptions.RoundtripInformation.html", saveOptions);
         }
 
         [Test]
