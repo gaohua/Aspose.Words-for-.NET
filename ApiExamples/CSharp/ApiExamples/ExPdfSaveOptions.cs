@@ -6,8 +6,6 @@
 //////////////////////////////////////////////////////////////////////////
 
 using System;
-using Aspose.Pdf;
-using Aspose.Pdf.Annotations;
 using Aspose.Words;
 using Aspose.Words.Saving;
 using NUnit.Framework;
@@ -18,10 +16,11 @@ using SaveFormat = Aspose.Words.SaveFormat;
 using SaveOptions = Aspose.Words.Saving.SaveOptions;
 using WarningInfo = Aspose.Words.WarningInfo;
 using WarningType = Aspose.Words.WarningType;
-
 #if !__MOBILE__
+using Aspose.Pdf;
 using Aspose.Pdf.Facades;
 using Aspose.Pdf.Text;  
+using Aspose.Pdf.Annotations;
 #endif
 
 namespace ApiExamples
@@ -251,8 +250,8 @@ namespace ApiExamples
 
             builder.Document.Save(MyDir + @"\Artifacts\PdfSaveOptions.EscapedUri Out.pdf", options);
             //ExEnd
-
-            Aspose.Pdf.Document pdfDocument =
+#if !__MOBILE__
+             Aspose.Pdf.Document pdfDocument =
                 new Aspose.Pdf.Document(MyDir + @"\Artifacts\PdfSaveOptions.EscapedUri Out.pdf");
 
             // get first page
@@ -264,6 +263,7 @@ namespace ApiExamples
             string uriText = action.URI;
 
             Assert.AreEqual(result, uriText);
+#endif
             //ExEnd
         }
 

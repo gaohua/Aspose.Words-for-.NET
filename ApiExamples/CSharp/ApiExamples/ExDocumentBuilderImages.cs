@@ -73,9 +73,9 @@ namespace ApiExamples
                     builder.InsertImage(imageBytes.ToArray());
                     builder.Document.Save(ArtifactsDir + "Image.CreateFromByteArrayDefault.doc");
                 }
-#endif
-                //ExEnd
             }
+#endif
+            //ExEnd
         }
 
         [Test]
@@ -109,9 +109,9 @@ namespace ApiExamples
                     builder.InsertImage(imageBytes, ConvertUtil.PixelToPoint(450), ConvertUtil.PixelToPoint(144));
                     builder.Document.Save(ArtifactsDir + "Image.CreateFromByteArrayCustomSize.doc");
                 }
-#endif
-                //ExEnd
             }
+#endif
+            //ExEnd
         }
 
         [Test]
@@ -125,8 +125,7 @@ namespace ApiExamples
 #if NETSTANDARD2_0 || __MOBILE__
             using (SkiaSharp.SKBitmap bitmap = SkiaSharp.SKBitmap.Decode(ImageDir + "Aspose.Words.gif"))
             {
-                using (SkiaSharp.SKFileWStream fs =
- new SkiaSharp.SKFileWStream(ArtifactsDir + "InsertImageFromByteArrayCustomSize.png"))
+                using (SkiaSharp.SKFileWStream fs = new SkiaSharp.SKFileWStream(ArtifactsDir + "InsertImageFromByteArrayCustomSize.png"))
                 {
                     bitmap.Encode(fs, SKEncodedImageFormat.Png, 100);
                 }
@@ -146,9 +145,11 @@ namespace ApiExamples
                         RelativeVerticalPosition.Margin, 100, 200, 100, WrapType.Square);
                     builder.Document.Save(ArtifactsDir + "Image.CreateFromByteArrayRelativePosition.doc");
                 }
-#endif
-                //ExEnd
+
+                
             }
+#endif
+            //ExEnd
         }
 
         [Test]
