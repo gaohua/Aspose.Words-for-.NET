@@ -2255,6 +2255,9 @@ namespace ApiExamples
             //ExEnd
         }
 
+#if !(NETSTANDARD2_0 || __MOBILE__)
+        
+
         //ExStart
         //ExFor:BarcodeParameters
         //ExFor:BarcodeParameters.AddStartStopChar
@@ -2343,5 +2346,6 @@ namespace ApiExamples
             doc.Save(MyDir + @"\Artifacts\Field.BarcodeGenerator.docx");
         }
         //ExEnd
+#endif
     }
 }
