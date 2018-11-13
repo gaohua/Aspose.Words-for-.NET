@@ -49,6 +49,8 @@ namespace ApiExamples
             //ExStart
             //ExFor:StructuredDocumentTag.Style
             //ExFor:StructuredDocumentTag.StyleName
+            //ExFor:MarkupLevel
+            //ExFor:SdtType
             //ExSummary:Shows how to work with styles for content control elements.
             Document doc = new Document();
             DocumentBuilder builder = new DocumentBuilder(doc);
@@ -156,7 +158,7 @@ namespace ApiExamples
 
             // Insert content control into the document
             builder.InsertNode(sdtCheckBox);
-            //ExEnd
+            
             MemoryStream dstStream = new MemoryStream();
             doc.Save(dstStream, SaveFormat.Docx);
 

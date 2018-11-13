@@ -29,6 +29,7 @@ namespace ApiExamples
     public class ExSignDocumentCustom : ApiExampleBase
     {
         //ExStart
+        //ExFor:CertificateHolder
         //ExFor:SignatureLineOptions.Signer
         //ExFor:SignatureLineOptions.SignerTitle
         //ExFor:SignatureLine.Id

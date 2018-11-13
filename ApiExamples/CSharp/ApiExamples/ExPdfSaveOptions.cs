@@ -74,6 +74,50 @@ namespace ApiExamples
 #endif
         }
 
+        [Test]
+        public void AllowToAddBookmarksWithWhiteSpaces()
+        {
+            //ExStart
+            //ExFor:OutlineOptions.BookmarksOutlineLevels
+            //ExFor:BookmarksOutlineLevelCollection.Add(String, Int32)
+            //ExSummary:Shows how adding bookmarks outlines with whitespaces(pdf, xps)
+            Document doc = new Document();
+            DocumentBuilder builder = new DocumentBuilder(doc);
+
+            // Add bookmarks with whitespaces. MS Word formats (like doc, docx) does not support bookmarks with whitespaces by default 
+            // and all whitespaces in the bookmarks were replaced with underscores. If you need to use bookmarks in PDF or XPS outlines, you can use them with whitespaces.
+            builder.StartBookmark("My Bookmark");
+            builder.Writeln("Text inside a bookmark.");
+
+            builder.StartBookmark("Nested Bookmark");
+            builder.Writeln("Text inside a NestedBookmark.");
+            builder.EndBookmark("Nested Bookmark");
+
+            builder.Writeln("Text after Nested Bookmark.");
+            builder.EndBookmark("My Bookmark");
+
+            // Specify bookmarks outline level. If you are using xps format, just use XpsSaveOptions.
+            PdfSaveOptions pdfSaveOptions = new PdfSaveOptions();
+            pdfSaveOptions.OutlineOptions.BookmarksOutlineLevels.Add("My Bookmark", 1);
+            pdfSaveOptions.OutlineOptions.BookmarksOutlineLevels.Add("Nested Bookmark", 2);
+
+            doc.Save(MyDir + @"\Artifacts\Bookmarks.WhiteSpaces.pdf", pdfSaveOptions);
+            //ExEnd
+
+            // Bind pdf with Aspose.Pdf
+            PdfBookmarkEditor bookmarkEditor = new PdfBookmarkEditor();
+            bookmarkEditor.BindPdf(MyDir + @"\Artifacts\Bookmarks.WhiteSpaces.pdf");
+
+            // Get all bookmarks from the document
+            Bookmarks bookmarks = bookmarkEditor.ExtractBookmarks();
+
+            Assert.AreEqual(2, bookmarks.Count);
+
+            // Assert that all the bookmarks title are with whitespaces
+            Assert.AreEqual("My Bookmark", bookmarks[0].Title);
+            Assert.AreEqual("Nested Bookmark", bookmarks[1].Title);
+        }
+
         //Note: Test doesn't contain validation result.
         //For validation result, you can add some shapes to the document and assert, that the DML shapes are render correctly
         [Test]
@@ -230,7 +274,6 @@ namespace ApiExamples
             //ExEnd
         }
 
-        //Note: it works only for spaces. Why?
         [Test]
         [TestCase(@"https://www.google.com/search?q= aspose", @"https://www.google.com/search?q=%20aspose", true)]
         [TestCase(@"https://www.google.com/search?q=%20aspose", @"https://www.google.com/search?q=%20aspose", true)]
@@ -248,15 +291,16 @@ namespace ApiExamples
             PdfSaveOptions options = new PdfSaveOptions();
             options.EscapeUri = isEscaped;
 
-            builder.Document.Save(MyDir + @"\Artifacts\PdfSaveOptions.EscapedUri Out.pdf", options);
+            builder.Document.Save(MyDir + @"\Artifacts\PdfSaveOptions.EscapedUri.pdf", options);
             //ExEnd
-#if !__MOBILE__
-             Aspose.Pdf.Document pdfDocument =
-                new Aspose.Pdf.Document(MyDir + @"\Artifacts\PdfSaveOptions.EscapedUri Out.pdf");
 
-            // get first page
+#if !__MOBILE__
+            Aspose.Pdf.Document pdfDocument =
+                new Aspose.Pdf.Document(MyDir + @"\Artifacts\PdfSaveOptions.EscapedUri.pdf");
+
+            // Get first page
             Page page = pdfDocument.Pages[1];
-            // get the first link annotation
+            // Get the first link annotation
             LinkAnnotation linkAnnot = (LinkAnnotation) page.Annotations[1];
 
             GoToURIAction action = (GoToURIAction) linkAnnot.Action;
@@ -271,9 +315,12 @@ namespace ApiExamples
         public void HandleBinaryRasterWarnings()
         {
             //ExStart
-            //ExFor:MetafileRenderingMode.VectorWithFallback
+            //ExFor:MetafileRenderingMode
+            //ExFor:MetafileRenderingOptions
+            //ExFor:MetafileRenderingOptions.EmulateRasterOperations
+            //ExFor:MetafileRenderingOptions.RenderingMode
             //ExFor:IWarningCallback
-            //ExFor:PdfSaveOptions.MetafileRenderingOptions
+            //ExFor:FixedPageSaveOptions.MetafileRenderingOptions
             //ExSummary:Shows added fallback to bitmap rendering and changing type of warnings about unsupported metafile records
             Document doc = new Document(MyDir + "PdfSaveOptions.HandleRasterWarnings.doc");
 
@@ -284,7 +331,7 @@ namespace ApiExamples
                     RenderingMode = MetafileRenderingMode.VectorWithFallback
                 };
 
-            //If Aspose.Words cannot correctly render some of the metafile records to vector graphics then Aspose.Words renders this metafile to a bitmap. 
+            // If Aspose.Words cannot correctly render some of the metafile records to vector graphics then Aspose.Words renders this metafile to a bitmap. 
             HandleDocumentWarnings callback = new HandleDocumentWarnings();
             doc.WarningCallback = callback;
 
@@ -326,6 +373,8 @@ namespace ApiExamples
         {
             //ExStart
             //ExFor:HeaderFooterBookmarksExportMode
+            //ExFor:OutlineOptions
+            //ExFor:OutlineOptions.DefaultBookmarksOutlineLevel
             //ExSummary:Shows how bookmarks in headers/footers are exported to pdf
             Document doc = new Document(MyDir + "PdfSaveOption.HeaderFooterBookmarksExportMode.docx");
 

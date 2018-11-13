@@ -526,7 +526,7 @@ namespace ApiExamples
 
                 using (SKFileWStream fs = new SKFileWStream(ArtifactsDir + "Rendering.RenderToScale.png"))
                 {
-                    bitmap.Encode(fs, SKEncodedImageFormat.Png, 100);
+                    bitmap.PeekPixels().Encode(fs, SKEncodedImageFormat.Png, 100);
                 }
             }
 #else
@@ -610,7 +610,7 @@ namespace ApiExamples
 
                     using (SKFileWStream fs = new SKFileWStream(ArtifactsDir + "Rendering.RenderToSize.png"))
                     {
-                        bitmap.Encode(fs, SKEncodedImageFormat.Png, 100);
+                        bitmap.PeekPixels().Encode(fs, SKEncodedImageFormat.Png, 100);
                     }
                 }
             }
@@ -727,7 +727,7 @@ namespace ApiExamples
 
                     using (SKFileWStream fs = new SKFileWStream(ArtifactsDir + "Rendering.Thumbnails.png"))
                     {
-                        bitmap.Encode(fs, SKEncodedImageFormat.Png, 100);
+                        bitmap.PeekPixels().Encode(fs, SKEncodedImageFormat.Png, 100);
                     }
                 }
             }
@@ -1187,6 +1187,7 @@ namespace ApiExamples
         {
             //ExStart
             //ExFor:PdfSaveOptions.FontEmbeddingMode
+            //ExFor:PdfFontEmbeddingMode
             //ExId:EmbedStandardWindowsFonts
             //ExSummary:Shows how to set Aspose.Words to skip embedding Arial and Times New Roman fonts into a PDF document.
             // Load the document to render.
@@ -1227,6 +1228,9 @@ namespace ApiExamples
             //ExFor:PdfEncryptionDetails.#ctor
             //ExFor:PdfSaveOptions.EncryptionDetails
             //ExFor:PdfEncryptionDetails.Permissions
+            //ExFor:PdfEncryptionDetails.EncryptionAlgorithm
+            //ExFor:PdfEncryptionDetails.OwnerPassword
+            //ExFor:PdfEncryptionDetails.UserPassword
             //ExFor:PdfEncryptionAlgorithm
             //ExFor:PdfPermissions
             //ExFor:PdfEncryptionDetails
@@ -1257,6 +1261,7 @@ namespace ApiExamples
             Document doc = new Document(MyDir + "Rendering.NumeralFormat.doc");
             //ExStart
             //ExFor:FixedPageSaveOptions.NumeralFormat
+            //ExFor:NumeralFormat
             //ExSummary:Demonstrates how to set the numeral format used when saving to PDF.
             PdfSaveOptions options = new PdfSaveOptions();
             options.NumeralFormat = NumeralFormat.Context;

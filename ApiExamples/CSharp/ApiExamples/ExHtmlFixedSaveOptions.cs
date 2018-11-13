@@ -164,13 +164,10 @@ namespace ApiExamples
         {
             //ExStart
             //ExFor:FixedPageSaveOptions.OptimizeOutput
-            //ExSummary:Shows how to optimize document objects while saving.
+            //ExSummary:Shows how to optimize document objects while saving to html.
             Document doc = new Document(MyDir + "HtmlFixedSaveOptions.OptimizeGraphicsOutput.doc");
 
-            HtmlFixedSaveOptions saveOptions = new HtmlFixedSaveOptions
-            {
-                OptimizeOutput = false
-            };
+            HtmlFixedSaveOptions saveOptions = new HtmlFixedSaveOptions { OptimizeOutput = false };
 
             doc.Save(ArtifactsDir + "HtmlFixedPageMargins.html", saveOptions);
             //ExEnd
@@ -178,6 +175,8 @@ namespace ApiExamples
 
         //ExStart
         //ExFor:HtmlFixedSaveOptions.UseTargetMachineFonts
+        //ExFor:IResourceSavingCallback
+        //ExFor:IResourceSavingCallback.ResourceSaving(ResourceSavingArgs)
         //ExSummary: Shows how used target machine fonts to display the document.
         [Test] //ExSkip
         public void UsingMachineFonts()

@@ -169,11 +169,68 @@ namespace ApiExamples
             //ExEnd
         }
 
+        [Ignore("WORDSNET-17733")]
+        [Test]
+        [TestCase("!", false, "")]
+        [TestCase(", ", false, "")]
+        [TestCase(" . ", false, "")]
+        [TestCase(" :", false, "")]
+        [TestCase("  ; ", false, "")]
+        [TestCase(" ?  ", false, "")]
+        [TestCase("  ¡  ", false, "")]
+        [TestCase("  ¿  ", false, "")]
+        [TestCase("!", true, "!\f")]
+        [TestCase(", ", true, ", \f")]
+        [TestCase(" . ", true, " . \f")]
+        [TestCase(" :", true, " :\f")]
+        [TestCase("  ; ", true, "  ; \f")]
+        [TestCase(" ?  ", true, " ?  \f")]
+        [TestCase("  ¡  ", true, "  ¡  \f")]
+        [TestCase("  ¿  ", true, "  ¿  \f")]
+        public void RemoveColonBetweenEmptyMergeFields(string punctuationMark,
+            bool isCleanupParagraphsWithPunctuationMarks, string resultText)
+        {
+            //ExStart
+            //ExFor:MailMerge.CleanupParagraphsWithPunctuationMarks
+            //ExSummary:Shows how to remove paragraphs with punctuation marks after mail merge operation.
+            Document doc = new Document();
+            DocumentBuilder builder = new DocumentBuilder(doc);
+
+            FieldMergeField mergeFieldOption1 = (FieldMergeField) builder.InsertField("MERGEFIELD", "Option_1");
+            mergeFieldOption1.FieldName = "Option_1";
+
+            // Here is the complete list of cleanable punctuation marks:
+            // !
+            // ,
+            // .
+            // :
+            // ;
+            // ?
+            // ¡
+            // ¿
+            builder.Write(punctuationMark);
+
+            FieldMergeField mergeFieldOption2 = (FieldMergeField) builder.InsertField("MERGEFIELD", "Option_2");
+            mergeFieldOption2.FieldName = "Option_2";
+
+            doc.MailMerge.CleanupOptions = MailMergeCleanupOptions.RemoveEmptyParagraphs;
+            // The default value of the option is true which means that the behaviour was changed to mimic MS Word
+            // If you rely on the old behavior are able to revert it by setting the option to false
+            doc.MailMerge.CleanupParagraphsWithPunctuationMarks = isCleanupParagraphsWithPunctuationMarks;
+
+            doc.MailMerge.Execute(new[] { "Option_1", "Option_2" }, new object[] { null, null });
+
+            doc.Save(MyDir + @"\Artifacts\RemoveColonBetweenEmptyMergeFields.docx");
+            //ExEnd
+
+            Assert.AreEqual(resultText, doc.GetText());
+        }
+
         [Test]
         public void GetFieldNames()
         {
             //ExStart
-            //ExFor:FieldAddressBlock.#ctor
+            //ExFor:FieldAddressBlock
             //ExFor:FieldAddressBlock.GetFieldNames
             //ExSummary:Shows how to get mail merge field names used by the field
             Document doc = new Document(MyDir + "MailMerge.GetFieldNames.docx");
@@ -240,6 +297,7 @@ namespace ApiExamples
         {
             //ExStart
             //ExFor:MailMerge.GetRegionsHierarchy
+            //ExFor:MailMergeRegionInfo
             //ExFor:MailMergeRegionInfo.Regions
             //ExFor:MailMergeRegionInfo.Name
             //ExFor:MailMergeRegionInfo.Fields
@@ -284,7 +342,9 @@ namespace ApiExamples
         public void TestTagsReplacedEventShouldRisedWithUseNonMergeFieldsOption()
         {
             //ExStart
+            //ExFor:MailMerge.MailMergeCallback
             //ExFor:IMailMergeCallback
+            //ExFor:IMailMergeCallback.TagsReplaced
             //ExSummary:Shows how to define custom logic for handling events during mail merge.
             Document document = new Document();
             document.MailMerge.UseNonMergeFields = true;

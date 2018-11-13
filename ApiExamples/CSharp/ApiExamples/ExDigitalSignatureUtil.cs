@@ -19,6 +19,7 @@ namespace ApiExamples
         public void RemoveAllSignatures()
         {
             //ExStart
+            //ExFor:DigitalSignatureUtil
             //ExFor:DigitalSignatureUtil.RemoveAllSignatures(Stream, Stream)
             //ExFor:DigitalSignatureUtil.RemoveAllSignatures(String, String)
             //ExSummary:Shows how to remove every signature from a document.
@@ -63,6 +64,8 @@ namespace ApiExamples
         public void SignDocument()
         {
             //ExStart
+            //ExFor:CertificateHolder
+            //ExFor:CertificateHolder.Create(String, String)
             //ExFor:DigitalSignatureUtil.Sign(Stream, Stream, CertificateHolder, SignOptions)
             //ExFor:SignOptions.Comments
             //ExFor:SignOptions.SignTime
@@ -122,6 +125,7 @@ namespace ApiExamples
         public void SingDocumentWithPasswordDecrypring()
         {
             //ExStart
+            //ExFor:CertificateHolder
             //ExFor:SignOptions.DecryptionPassword
             //ExSummary:Shows how to sign encrypted document file.
             string outputFileName = ArtifactsDir + "Document.Encrypted.docx";

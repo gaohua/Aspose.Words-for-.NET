@@ -85,7 +85,7 @@ namespace ApiExamples
         {
             //ExStart
             //ExId:DocumentCtor
-            //ExFor:Document.#ctor(System.Boolean)
+            //ExFor:Document.#ctor(Boolean)
             //ExSummary:Shows how to create a blank document. Note the blank document contains one section and one paragraph.
             Document doc = new Document();
             //ExEnd
@@ -144,7 +144,7 @@ namespace ApiExamples
         {
             //ExStart
             //ExFor:Document.#ctor(Stream,LoadOptions)
-            //ExFor:LoadOptions
+            //ExFor:LoadOptions.#ctor
             //ExFor:LoadOptions.BaseUri
             //ExId:DocumentCtor_LoadOptions
             //ExSummary:Opens an HTML document with images from a stream using a base URI.
@@ -787,18 +787,26 @@ namespace ApiExamples
             //ExFor:Document.DigitalSignatures
             //ExFor:DigitalSignatureCollection
             //ExFor:DigitalSignatureCollection.IsValid
+            //ExFor:DigitalSignatureCollection.Count
+            //ExFor:DigitalSignatureCollection.Item(Int32)
+            //ExFor:DigitalSignatureType
             //ExId:ValidateAllDocumentSignatures
             //ExSummary:Shows how to validate all signatures in a document.
             // Load the signed document.
-            Document doc = new Document(MyDir + "Document.Signed.docx");
+            Document doc = new Document(MyDir + "Document.DigitalSignature.docx");
+            DigitalSignatureCollection digitalSignatureCollection = doc.DigitalSignatures;
 
-            if (doc.DigitalSignatures.IsValid)
+            if (digitalSignatureCollection.IsValid)
+            {
                 Console.WriteLine("Signatures belonging to this document are valid");
+                Console.WriteLine(digitalSignatureCollection.Count);
+                Console.WriteLine(digitalSignatureCollection[0].SignatureType);
+            }
             else
+            {
                 Console.WriteLine("Signatures belonging to this document are NOT valid");
+            }
             //ExEnd
-
-            Assert.True(doc.DigitalSignatures.IsValid);
         }
 
         [Test]
@@ -806,8 +814,10 @@ namespace ApiExamples
         public void ValidateIndividualDocumentSignatures()
         {
             //ExStart
-            //ExFor:DigitalSignature
+            //ExFor:CertificateHolder.Certificate
             //ExFor:Document.DigitalSignatures
+            //ExFor:DigitalSignature
+            //ExFor:DigitalSignatureCollection
             //ExFor:DigitalSignature.IsValid
             //ExFor:DigitalSignature.Comments
             //ExFor:DigitalSignature.SignTime
@@ -1339,14 +1349,19 @@ namespace ApiExamples
         [Description("WORDSNET-16099")]
         public void SetFootnoteNumberOfColumns()
         {
+            //ExStart
+            //ExFor:FootnoteOptions
+            //ExFor:FootnoteOptions.Columns
+            //ExSummary:Shows how to set the number of columns with which the footnotes area is formatted.
             Document doc = new Document(MyDir + "Document.FootnoteEndnote.docx");
 
-            Assert.AreEqual(0, doc.FootnoteOptions.Columns);
+            Assert.AreEqual(0, doc.FootnoteOptions.Columns); //ExSkip
 
-            // Lets change number of columns for footnotes on page. If columns value is 0 than footnotes area is formatted with a number of columns based on
-            // the number of columns on the displayed page
+            // Lets change number of columns for footnotes on page. If columns value is 0 than footnotes area
+            // is formatted with a number of columns based on the number of columns on the displayed page
             doc.FootnoteOptions.Columns = 2;
             doc.Save(ArtifactsDir + "Document.FootnoteOptions.docx");
+            //ExEnd
 
             //Assert that number of columns gets correct
             doc = new Document(ArtifactsDir + "Document.FootnoteOptions.docx");
@@ -1358,6 +1373,7 @@ namespace ApiExamples
         {
             //ExStart
             //ExFor:FootnoteOptions.Position
+            //ExFor:FootnotePosition
             //ExSummary:Shows how to define footnote position in the document.
             Document doc = new Document(MyDir + "Document.FootnoteEndnote.docx");
 
@@ -1382,6 +1398,7 @@ namespace ApiExamples
         {
             //ExStart
             //ExFor:FootnoteOptions.RestartRule
+            //ExFor:FootnoteNumberingRule
             //ExSummary:Shows how to define when automatic numbering for footnotes restarts in the document.
             Document doc = new Document(MyDir + "Document.FootnoteEndnote.docx");
 
@@ -1405,7 +1422,9 @@ namespace ApiExamples
         public void SetEndnotePosition()
         {
             //ExStart
+            //ExFor:EndnoteOptions
             //ExFor:EndnoteOptions.Position
+            //ExFor:EndnotePosition
             //ExSummary:Shows how to define endnote position in the document.
             Document doc = new Document(MyDir + "Document.FootnoteEndnote.docx");
 
@@ -1478,6 +1497,7 @@ namespace ApiExamples
         public void CompareDocumentsWithCompareOptions()
         {
             //ExStart
+            //ExFor:CompareOptions
             //ExFor:CompareOptions.IgnoreFormatting
             //ExFor:CompareOptions.IgnoreCaseChanges
             //ExFor:CompareOptions.IgnoreComments
@@ -1485,7 +1505,9 @@ namespace ApiExamples
             //ExFor:CompareOptions.IgnoreFields
             //ExFor:CompareOptions.IgnoreFootnotes
             //ExFor:CompareOptions.IgnoreTextboxes
+            //ExFor:CompareOptions.IgnoreHeadersAndFooters
             //ExFor:CompareOptions.Target
+            //ExFor:ComparisonTargetType
             //ExFor:Document.Compare(Document, String, DateTime, CompareOptions)
             //ExSummary: Shows how to specify which document shall be used as a target during comparison
             Document doc1 = new Document(MyDir + "Document.CompareOptions.1.docx");
@@ -1495,12 +1517,13 @@ namespace ApiExamples
             CompareOptions compareOptions = new CompareOptions
             {
                 IgnoreFormatting = true,
-                IgnoreCaseChanges = true,
-                IgnoreComments = true,
-                IgnoreTables = true,
-                IgnoreFields = true,
-                IgnoreFootnotes = true,
-                IgnoreTextboxes = true,
+                IgnoreCaseChanges = false,
+                IgnoreComments = false,
+                IgnoreTables = false,
+                IgnoreFields = false,
+                IgnoreFootnotes = false,
+                IgnoreTextboxes = false,
+                IgnoreHeadersAndFooters = false,
                 Target = ComparisonTargetType.New
             };
             doc1.Compare(doc2, "vderyushev", DateTime.Now, compareOptions);
@@ -1554,13 +1577,12 @@ namespace ApiExamples
         {
             //ExStart
             //ExFor:Document.Cleanup(CleanupOptions)
-            //ExFor:Document.RemoveUnusedResources
             //ExFor:CleanupOptions
             //ExFor:CleanupOptions.UnusedLists
             //ExFor:CleanupOptions.UnusedStyles
             //ExSummary:Shows how to remove all unused styles and lists from a document. 
             Document doc = new Document(MyDir + "Document.doc");
-
+            
             CleanupOptions cleanupOptions = new CleanupOptions
             {
                 UnusedLists = true,
@@ -1690,6 +1712,7 @@ namespace ApiExamples
         {
             //ExStart
             //ExFor:Document.HyphenationOptions
+            //ExFor:HyphenationOptions
             //ExFor:HyphenationOptions.AutoHyphenation
             //ExFor:HyphenationOptions.ConsecutiveHyphenLimit
             //ExFor:HyphenationOptions.HyphenationZone
@@ -1753,8 +1776,10 @@ namespace ApiExamples
         public void ExtractPlainTextFromDocument()
         {
             //ExStart
+            //ExFor:PlainTextDocument
             //ExFor:PlainTextDocument.#ctor(String)
             //ExFor:PlainTextDocument.#ctor(String, LoadOptions)
+            //ExFor:PlainTextDocument.Text
             //ExSummary:Show how to simply extract text from a document.
             TxtLoadOptions loadOptions = new TxtLoadOptions { DetectNumberingWithWhitespaces = false };
 
@@ -1905,7 +1930,7 @@ namespace ApiExamples
         public void WordCountUpdate()
         {
             //ExStart
-            //ExFor:Document.UpdateWordCount(System.Boolean)
+            //ExFor:Document.UpdateWordCount(Boolean)
             //ExSummary:Shows how to keep track of the word count.
             // Create an empty document
             Document doc = new Document();
@@ -2269,6 +2294,12 @@ namespace ApiExamples
         {
             //ExStart
             //ExFor:Document.LayoutOptions
+            //ExFor:LayoutOptions
+            //ExFor:LayoutOptions.RevisionOptions
+            //ExFor:RevisionColor
+            //ExFor:RevisionOptions
+            //ExFor:RevisionOptions.InsertedTextColor
+            //ExFor:RevisionOptions.ShowRevisionBars
             //ExSummary:Shows how to set a document's layout options.
             Document doc = new Document();
 
@@ -2303,6 +2334,8 @@ namespace ApiExamples
         {
             //ExStart
             //ExFor:Document.MailMergeSettings
+            //ExFor:MailMergeDataType
+            //ExFor:MailMergeMainDocumentType
             //ExSummary:Shows how to execute a mail merge with MailMergeSettings.
             // We'll create a simple document that will act as a destination for mail merge data
             Document doc = new Document();
@@ -2347,6 +2380,13 @@ namespace ApiExamples
         {
             //ExStart
             //ExFor:Document.PackageCustomParts
+            //ExFor:CustomPart
+            //ExFor:CustomPart.ContentType
+            //ExFor:CustomPart.RelationshipType
+            //ExFor:CustomPart.IsExternal
+            //ExFor:CustomPart.Data
+            //ExFor:CustomPart.Name
+            //ExFor:CustomPart.Clone
             //ExSummary:Shows how to open a document with custom parts and access them.
             Document doc = new Document(MyDir + "Document.PackageCustomParts.docx");
 
@@ -2369,6 +2409,14 @@ namespace ApiExamples
             Assert.AreEqual("http://mytest.payload.external", part.RelationshipType);
             Assert.AreEqual(true, part.IsExternal);
             Assert.AreEqual(0, part.Data.Length);
+
+            // Lets copy external part
+            CustomPart clonedPart = doc.PackageCustomParts[1].Clone();
+            Assert.AreEqual("http://www.aspose.com/Images/aspose-logo.jpg", clonedPart.Name);
+            Assert.AreEqual("", clonedPart.ContentType);
+            Assert.AreEqual("http://mytest.payload.external", clonedPart.RelationshipType);
+            Assert.AreEqual(true, clonedPart.IsExternal);
+            Assert.AreEqual(0, clonedPart.Data.Length);
             //ExEnd
         }
 
@@ -2429,6 +2477,10 @@ namespace ApiExamples
         {
             //ExStart
             //ExFor:Document.WriteProtection
+            //ExFor:WriteProtection
+            //ExFor:WriteProtection.IsWriteProtected
+            //ExFor:WriteProtection.ReadOnlyRecommended
+            //ExFor:WriteProtection.ValidatePassword(String)
             //ExSummary:Shows how to protect a document with a password.
             Document doc = new Document();
             Assert.IsFalse(doc.WriteProtection.IsWriteProtected);
@@ -2466,6 +2518,7 @@ namespace ApiExamples
         public void AddEditingLanguage()
         {
             //ExStart
+            //ExFor:LanguagePreferences
             //ExFor:LanguagePreferences.AddEditingLanguage(EditingLanguage)
             //ExSummary:Shows how to set up language preferences that will be used when document is loading
             LoadOptions loadOptions = new LoadOptions();
@@ -2486,6 +2539,7 @@ namespace ApiExamples
         {
             //ExStart
             //ExFor:LanguagePreferences.SetAsDefault(EditingLanguage)
+            //ExFor:LanguagePreferences.DefaultEditingLanguage
             //ExSummary:Shows how to set language as default
             LoadOptions loadOptions = new LoadOptions();
             // You can set language which only
@@ -2505,11 +2559,11 @@ namespace ApiExamples
         public void GetInfoAboutRevisionsInRevisionGroups()
         {
             //ExStart
-            //ExFor:RevisionGroup.#ctor
+            //ExFor:RevisionGroup
             //ExFor:RevisionGroup.Author
             //ExFor:RevisionGroup.RevisionType
             //ExFor:RevisionGroup.Text
-            //ExFor:RevisionGroupCollection.#ctor
+            //ExFor:RevisionGroupCollection
             //ExFor:RevisionGroupCollection.Count
             //ExSummary:Shows how to get info about a set of revisions in document.
             Document doc = new Document(MyDir + "Document.Revisions.docx");
@@ -2530,8 +2584,9 @@ namespace ApiExamples
         public void GetSpecificRevisionGroup()
         {
             //ExStart
-            //ExFor:RevisionGroupCollection.#ctor
+            //ExFor:RevisionGroupCollection
             //ExFor:RevisionGroupCollection.Item(Int32)
+            //ExFor:RevisionType
             //ExSummary:Shows how to get a set of revisions in document.
             Document doc = new Document(MyDir + "Document.Revisions.docx");
 
@@ -2567,6 +2622,7 @@ namespace ApiExamples
             };
             
             doc.Save(MyDir + @"\Artifacts\Document.RemovePersonalInformation.docx");
+            //ExEnd
         }
 
         [Test]
@@ -2603,7 +2659,7 @@ namespace ApiExamples
         {
             //ExStart
             //ExFor:Document.CopyStylesFromTemplate(Document)
-            //ExSummary:Shows how to copies styles from the template to a document.
+            //ExSummary:Shows how to copies styles from the template to a document via Document.
             Document template = new Document(MyDir + "Rendering.doc");
 
             Document target = new Document(MyDir + "Document.docx");
@@ -2618,7 +2674,7 @@ namespace ApiExamples
         {
             //ExStart
             //ExFor:Document.CopyStylesFromTemplate(String)
-            //ExSummary:Shows how to copies styles from the template to a document.
+            //ExSummary:Shows how to copies styles from the template to a document via string.
             string templatePath = MyDir + "Rendering.doc";
             
             Document target = new Document(MyDir + "Document.docx");
