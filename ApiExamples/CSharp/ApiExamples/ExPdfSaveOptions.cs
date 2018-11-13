@@ -103,7 +103,7 @@ namespace ApiExamples
 
             doc.Save(MyDir + @"\Artifacts\Bookmarks.WhiteSpaces.pdf", pdfSaveOptions);
             //ExEnd
-
+#if !__MOBILE__
             // Bind pdf with Aspose.Pdf
             PdfBookmarkEditor bookmarkEditor = new PdfBookmarkEditor();
             bookmarkEditor.BindPdf(MyDir + @"\Artifacts\Bookmarks.WhiteSpaces.pdf");
@@ -116,6 +116,7 @@ namespace ApiExamples
             // Assert that all the bookmarks title are with whitespaces
             Assert.AreEqual("My Bookmark", bookmarks[0].Title);
             Assert.AreEqual("Nested Bookmark", bookmarks[1].Title);
+#endif
         }
 
         //Note: Test doesn't contain validation result.

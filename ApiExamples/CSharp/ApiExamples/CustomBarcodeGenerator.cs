@@ -3,7 +3,7 @@ using System.Drawing;
 using System.Globalization;
 using Aspose.BarCode;
 using Aspose.Words.Fields;
-using Image = 
+using Image =
 #if NETSTANDARD2_0 || __MOBILE__
 SkiaSharp.SKBitmap;
 #else

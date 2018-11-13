@@ -5,14 +5,15 @@
 // "as is", without warranty of any kind, either expressed or implied.
 //////////////////////////////////////////////////////////////////////////
 
-using System.Drawing;
-using System.Drawing.Imaging;
 using System.IO;
 using Aspose.Words;
 using Aspose.Words.Drawing;
 using NUnit.Framework;
-#if NETSTANDARD2_0 || __MOBILE__
+#if __MOBILE__
 using SkiaSharp;
+#else
+using System.Drawing;
+using System.Drawing.Imaging;
 #endif
 
 namespace ApiExamples
@@ -131,6 +132,7 @@ namespace ApiExamples
         }
 #endif
 
+#if !(NETSTANDARD2_0 || __MOBILE__)
         [Test]
         public void InsertImageFromByteArray()
         {
@@ -163,5 +165,36 @@ namespace ApiExamples
             doc.Save(ArtifactsDir + "InsertImageFromByteArray.docx");
             //ExEnd
         }
+#else
+        [Test]
+        public void InsertImageFromByteArrayNetStandard2()
+        {
+            //ExStart
+            //ExFor:DocumentBuilder.InsertImage(Byte[])
+            //ExFor:DocumentBuilder.InsertImage(Byte[], Double, Double)
+            //ExFor:DocumentBuilder.InsertImage(Byte[], RelativeHorizontalPosition, Double, RelativeVerticalPosition, Double, Double, Double, WrapType)
+            //ExSummary:Shows different solutions of how to import an image into a document from a byte array (.NetStandard 2.0).
+            Document doc = new Document();
+            DocumentBuilder builder = new DocumentBuilder(doc);
+
+            using (SKBitmap bitmap = SKBitmap.Decode(ImageDir + "Aspose.Words.gif"))
+            {
+                byte[] imageByteArray = bitmap.Bytes;
+
+                builder.Writeln("\nInserted image from byte array: ");
+                builder.InsertImage(imageByteArray);
+
+                builder.Writeln("\nInserted image from byte array with a custom size: ");
+                builder.InsertImage(imageByteArray, ConvertUtil.PixelToPoint(250), ConvertUtil.PixelToPoint(144));
+
+                builder.Writeln("\nInserted image from byte array using relative positions: ");
+                builder.InsertImage(imageByteArray, RelativeHorizontalPosition.Margin, 100, RelativeVerticalPosition.Margin, 
+                    100, 200, 100, WrapType.Square);
+            }
+            
+            doc.Save(ArtifactsDir + "InsertImageFromByteArray.NetStandard2.docx");
+            //ExEnd
+        }
+#endif
     }
 }
