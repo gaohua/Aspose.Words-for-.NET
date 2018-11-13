@@ -18,7 +18,6 @@ using Aspose.Words.Fields;
 using Aspose.Words.Replacing;
 using Aspose.Words.Tables;
 using NUnit.Framework;
-
 #if NETSTANDARD2_0 || __MOBILE__
 using SkiaSharp;
 #endif
@@ -230,7 +229,6 @@ namespace ApiExamples
                     }
                 }
             }
-
             //ExEnd
         }
 
@@ -333,7 +331,45 @@ namespace ApiExamples
 
             // The best place for the watermark image is in the header or footer so it is shown on every page.
             builder.MoveToHeaderFooter(HeaderFooterType.HeaderPrimary);
+
+            Image image = Image.FromFile(ImageDir + "Watermark.png");
+
+            // Insert a floating picture.
+            Shape shape = builder.InsertImage(image);
+            shape.WrapType = WrapType.None;
+            shape.BehindText = true;
+
+            shape.RelativeHorizontalPosition = RelativeHorizontalPosition.Page;
+            shape.RelativeVerticalPosition = RelativeVerticalPosition.Page;
+
+            // Calculate image left and top position so it appears in the center of the page.
+            shape.Left = (builder.PageSetup.PageWidth - shape.Width) / 2;
+            shape.Top = (builder.PageSetup.PageHeight - shape.Height) / 2;
+
+            doc.Save(ArtifactsDir + "DocumentBuilder.InsertWatermark.doc");
+            //ExEnd
+        }
+
 #if NETSTANDARD2_0 || __MOBILE__
+        [Test]
+        public void InsertWatermarkNetStandard2()
+        {
+            //ExStart
+            //ExFor:HeaderFooterType
+            //ExFor:DocumentBuilder.MoveToHeaderFooter
+            //ExFor:PageSetup.PageWidth
+            //ExFor:PageSetup.PageHeight
+            //ExFor:DocumentBuilder.InsertImage(Image)
+            //ExFor:WrapType
+            //ExFor:RelativeHorizontalPosition
+            //ExFor:RelativeVerticalPosition
+            //ExSummary:Inserts a watermark image into a document using DocumentBuilder (.NetStandard 2.0).
+            Document doc = new Document();
+            DocumentBuilder builder = new DocumentBuilder(doc);
+
+            // The best place for the watermark image is in the header or footer so it is shown on every page.
+            builder.MoveToHeaderFooter(HeaderFooterType.HeaderPrimary);
+
             using (SKBitmap image = SKBitmap.Decode(ImageDir + "Watermark.png"))
             {
                 // Insert a floating picture.
@@ -348,24 +384,11 @@ namespace ApiExamples
                 shape.Left = (builder.PageSetup.PageWidth - shape.Width) / 2;
                 shape.Top = (builder.PageSetup.PageHeight - shape.Height) / 2;
             }
-#else
-            Image image = Image.FromFile(ImageDir + "Watermark.png");
 
-            // Insert a floating picture.
-            Shape shape = builder.InsertImage(image);
-            shape.WrapType = WrapType.None;
-            shape.BehindText = true;
-
-            shape.RelativeHorizontalPosition = RelativeHorizontalPosition.Page;
-            shape.RelativeVerticalPosition = RelativeVerticalPosition.Page;
-
-            // Calculate image left and top position so it appears in the center of the page.
-            shape.Left = (builder.PageSetup.PageWidth - shape.Width) / 2;
-            shape.Top = (builder.PageSetup.PageHeight - shape.Height) / 2;
-#endif
-            doc.Save(ArtifactsDir + "DocumentBuilder.InsertWatermark.doc");
+            doc.Save(ArtifactsDir + "DocumentBuilder.InsertWatermark.NetStandard2.doc");
             //ExEnd
         }
+#endif
 
         [Test]
         public void InsertHtml()
@@ -500,7 +523,7 @@ namespace ApiExamples
             FormFieldCollection formFields = doc.Range.FormFields;
 
             // Check that is the right checkbox
-            Assert.AreEqual(String.Empty, formFields[0].Name);
+            Assert.AreEqual(string.Empty, formFields[0].Name);
 
             //Assert that parameters sets correctly
             Assert.AreEqual(false, formFields[0].Checked);
@@ -530,12 +553,11 @@ namespace ApiExamples
         public void InsertCheckBoxEmptyName()
         {
             Document doc = new Document();
-
             DocumentBuilder builder = new DocumentBuilder(doc);
 
-            //Assert that empty String name working correctly
+            // Checking that the checkbox insertion with an empty name working correctly
             builder.InsertCheckBox("", true, false, 1);
-            builder.InsertCheckBox(String.Empty, false, 1);
+            builder.InsertCheckBox(string.Empty, false, 1);
         }
 
         [Test]
@@ -2092,23 +2114,42 @@ namespace ApiExamples
             //ExSummary:Shows how to insert an OLE object into a document.
             Document doc = new Document();
             DocumentBuilder builder = new DocumentBuilder(doc);
-#if NETSTANDARD2_0 || __MOBILE__
-            using (SKBitmap representingImage = SKBitmap.Decode(ImageDir + "Aspose.Words.gif"))
-            {
-                Shape oleObject =
- builder.InsertOleObject(MyDir + "Document.Spreadsheet.xlsx", false, false, representingImage);
-                Shape oleObjectWithProgId =
- builder.InsertOleObject(MyDir + "Document.Spreadsheet.xlsx", "Excel.Sheet", false, false, representingImage);
-            }
-#else
+
             Image representingImage = Image.FromFile(ImageDir + "Aspose.Words.gif");
 
-            Shape oleObject = builder.InsertOleObject(MyDir + "Document.Spreadsheet.xlsx", false, false, representingImage);
-            Shape oleObjectWithProgId = builder.InsertOleObject(MyDir + "Document.Spreadsheet.xlsx", "Excel.Sheet", false, false, representingImage);
-#endif            
+            // OleObject
+            builder.InsertOleObject(MyDir + "Document.Spreadsheet.xlsx", false, false, representingImage); 
+            //OleObject with ProgId
+            builder.InsertOleObject(MyDir + "Document.Spreadsheet.xlsx", "Excel.Sheet", false, false, representingImage);
+
             doc.Save(ArtifactsDir + "Document.InsertedOleObject.docx");
             //ExEnd
         }
+
+#if NETSTANDARD2_0 || __MOBILE__
+        [Test]
+        public void InsertOleObjectNetStandard2()
+        {
+            //ExStart
+            //ExFor:DocumentBuilder.InsertOleObject(String, Boolean, Boolean, Image)
+            //ExFor:DocumentBuilder.InsertOleObject(String, String, Boolean, Boolean, Image)
+            //ExSummary:Shows how to insert an OLE object into a document (.NetStandard 2.0).
+            Document doc = new Document();
+            DocumentBuilder builder = new DocumentBuilder(doc);
+
+            using (SKBitmap representingImage = SKBitmap.Decode(ImageDir + "Aspose.Words.gif"))
+            {
+                // OleObject
+                builder.InsertOleObject(MyDir + "Document.Spreadsheet.xlsx", false, false, representingImage);
+                //OleObject with ProgId
+                builder.InsertOleObject(MyDir + "Document.Spreadsheet.xlsx", "Excel.Sheet", false, false,
+                    representingImage);
+            }
+
+            doc.Save(ArtifactsDir + "Document.InsertedOleObject.NetStandard2.docx");
+            //ExEnd
+        }
+#endif            
 
         [Test]
         public void InsertOleObjectException()
@@ -2348,8 +2389,6 @@ namespace ApiExamples
                             image.Width, image.Height, WrapType.Square);
                     }
                 }
-
-                doc.Save(MyDir + @"\Artifacts\DocumentBuilder.InsertOnlineVideo.docx");
             }
 
             doc.Save(ArtifactsDir + "DocumentBuilder.InsertOnlineVideo.docx");
@@ -2435,45 +2474,44 @@ namespace ApiExamples
             DocumentBuilder builder = new DocumentBuilder(doc);
 
             // Let's take a spreadsheet from our system and insert it into the document
-            Stream spreadsheetStream = File.Open(MyDir + "MySpreadsheet.xlsx", FileMode.Open);
-
-            // The spreadsheet can be activated by double clicking the panel that you'll see in the document immediately under the text we will add
-            // We did not set the area to double click as an icon nor did we change its appearance so it looks like a simple panel
-            builder.Writeln("Spreadsheet Ole object:");
-            builder.InsertOleObject(spreadsheetStream, "MyOleObject.xlsx", false, null);
-
-            // A powerpoint presentation is another type of object we can embed in our document
-            // This time we'll also exercise some control over how it looks 
-            Stream powerpointStream = File.Open(MyDir + "MyPresentation.pptx", FileMode.Open);
-
-            // If we insert the Ole object as an icon, we are still provided with a default icon
-            // If that is not suitable, we can make the icon to look like any image
-            using (WebClient webClient = new WebClient())
+            using (Stream spreadsheetStream = File.Open(MyDir + "MySpreadsheet.xlsx", FileMode.Open))
             {
-                byte[] imgBytes = webClient.DownloadData("http://www.aspose.com/images/aspose-logo.gif");
+                // The spreadsheet can be activated by double clicking the panel that you'll see in the document immediately under the text we will add
+                // We did not set the area to double click as an icon nor did we change its appearance so it looks like a simple panel
+                builder.Writeln("Spreadsheet Ole object:");
+                builder.InsertOleObject(spreadsheetStream, "MyOleObject.xlsx", false, null);
+
+                // A powerpoint presentation is another type of object we can embed in our document
+                // This time we'll also exercise some control over how it looks 
+                using (Stream powerpointStream = File.Open(MyDir + "MyPresentation.pptx", FileMode.Open))
+                {
+                    // If we insert the Ole object as an icon, we are still provided with a default icon
+                    // If that is not suitable, we can make the icon to look like any image
+                    using (WebClient webClient = new WebClient())
+                    {
+                        byte[] imgBytes = webClient.DownloadData("http://www.aspose.com/images/aspose-logo.gif");
 
 #if NETSTANDARD2_0 || __MOBILE__
-                SkiaSharp.SKBitmap bitmap = SkiaSharp.SKBitmap.Decode(imgBytes);
+                        SkiaSharp.SKBitmap bitmap = SkiaSharp.SKBitmap.Decode(imgBytes);
 
-                builder.InsertParagraph();
-                builder.Writeln("Powerpoint Ole object:");
-                builder.InsertOleObject(powerpointStream, "MyOleObject.pptx", true, bitmap);
-#else
-                using (MemoryStream stream = new MemoryStream(imgBytes))
-                {
-                    using (Image image = Image.FromStream(stream))
-                    {
-                        // If we double click the image, the powerpoint presentation will open
                         builder.InsertParagraph();
                         builder.Writeln("Powerpoint Ole object:");
-                        builder.InsertOleObject(powerpointStream, "MyOleObject.pptx", true, image);
+                        builder.InsertOleObject(powerpointStream, "MyOleObject.pptx", true, bitmap);
+#else
+                        using (MemoryStream stream = new MemoryStream(imgBytes))
+                        {
+                            using (Image image = Image.FromStream(stream))
+                            {
+                                // If we double click the image, the powerpoint presentation will open
+                                builder.InsertParagraph();
+                                builder.Writeln("Powerpoint Ole object:");
+                                builder.InsertOleObject(powerpointStream, "MyOleObject.pptx", true, image);
+                            }
+                        }
+#endif
                     }
                 }
-#endif 
             }
-
-            powerpointStream.Close();
-            spreadsheetStream.Close();
 
             doc.Save(ArtifactsDir + "DocumentBuilder.InsertOleObject.docx");
             //ExEnd
@@ -2529,7 +2567,7 @@ namespace ApiExamples
             builder.Write("This is text with some other formatting ");
             //ExEnd
 
-            builder.Document.Save(MyDir + @"\Artifacts\DocumentBuilder.InsertStyleSeparator.docx");
+            builder.Document.Save(ArtifactsDir + "DocumentBuilder.InsertStyleSeparator.docx");
         }
 
         [Test]
@@ -2550,7 +2588,7 @@ namespace ApiExamples
             builder.ParagraphFormat.StyleName = paraStyle.Name;
             builder.Write("This is text with some other formatting ");
 
-            builder.Document.Save(MyDir + @"\Artifacts\DocumentBuilder.InsertStyleSeparator.docx");
+            builder.Document.Save(ArtifactsDir + "DocumentBuilder.InsertTextWithoutStyleSeparator.docx");
         }
     }
 }

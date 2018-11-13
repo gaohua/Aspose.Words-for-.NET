@@ -245,7 +245,6 @@ namespace ApiExamples
             private readonly Dictionary<Guid, BuildingBlock> mBlocksByGuid;
             private readonly StringBuilder mBuilder;
         }
-
         //ExEnd
     }
 }

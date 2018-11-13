@@ -13,7 +13,6 @@ using Aspose.Words.Saving;
 using Bookmark = Aspose.Words.Bookmark;
 #if !__MOBILE__
 using Aspose.Pdf.Facades;
-using System.Collections;
 #endif
 
 namespace ApiExamples

@@ -1341,7 +1341,6 @@ namespace ApiExamples
                 // Do something useful.
                 Console.WriteLine("Name: {0}, Value: {1}", name, value);
             }
-
             //ExEnd
         }
 
@@ -1547,7 +1546,8 @@ namespace ApiExamples
 
             doc1.Save(ArtifactsDir + "Document.UseCurrentDocumentFormatting.docx");
 
-            Assert.IsTrue(DocumentHelper.CompareDocs(ArtifactsDir + "Document.UseCurrentDocumentFormatting.docx", GoldsDir + "Document.UseCurrentDocumentFormatting Gold.docx"));
+            Assert.IsTrue(DocumentHelper.CompareDocs(ArtifactsDir + "Document.UseCurrentDocumentFormatting.docx",
+                GoldsDir + "Document.UseCurrentDocumentFormatting Gold.docx"));
         }
 
         [Test]
@@ -1742,7 +1742,8 @@ namespace ApiExamples
             Assert.AreEqual(720, doc.HyphenationOptions.HyphenationZone);
             Assert.AreEqual(true, doc.HyphenationOptions.HyphenateCaps);
 
-            Assert.IsTrue(DocumentHelper.CompareDocs(ArtifactsDir + "HyphenationOptions.docx", GoldsDir + "Document.HyphenationOptions Gold.docx"));
+            Assert.IsTrue(DocumentHelper.CompareDocs(ArtifactsDir + "HyphenationOptions.docx",
+                GoldsDir + "Document.HyphenationOptions Gold.docx"));
         }
 
         [Test]
