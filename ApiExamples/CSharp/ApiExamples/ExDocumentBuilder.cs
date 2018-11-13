@@ -313,6 +313,7 @@ namespace ApiExamples
             //ExEnd
         }
 
+#if !(NETSTANDARD2_0 || __MOBILE__)
         [Test]
         public void InsertWatermark()
         {
@@ -349,8 +350,7 @@ namespace ApiExamples
             doc.Save(ArtifactsDir + "DocumentBuilder.InsertWatermark.doc");
             //ExEnd
         }
-
-#if NETSTANDARD2_0 || __MOBILE__
+#else
         [Test]
         public void InsertWatermarkNetStandard2()
         {
@@ -2105,6 +2105,7 @@ namespace ApiExamples
             //ExEnd
         }
 
+#if !(NETSTANDARD2_0 || __MOBILE__)
         [Test]
         public void InsertOleObject()
         {
@@ -2126,7 +2127,7 @@ namespace ApiExamples
             //ExEnd
         }
 
-#if NETSTANDARD2_0 || __MOBILE__
+#else
         [Test]
         public void InsertOleObjectNetStandard2()
         {
