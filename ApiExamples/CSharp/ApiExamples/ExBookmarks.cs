@@ -189,59 +189,15 @@ namespace ApiExamples
 
             Assert.AreEqual("My_Bookmark", doc.Range.Bookmarks[0].Name); //ExSkip
 
-            //MS Word document does not support bookmark names with whitespaces by default. 
-            //If you have document which contains bookmark names with underscores, you can simply replace them to whitespaces.
+            // MS Word document does not support bookmark names with whitespaces by default. 
+            // If you have document which contains bookmark names with underscores, you can simply replace them to whitespaces.
             foreach (Bookmark bookmark in doc.Range.Bookmarks)
             {
                 bookmark.Name = bookmark.Name.Replace("_", " ");
             }
             //ExEnd
 
-            Assert.AreEqual("My Bookmark", doc.Range.Bookmarks[0].Name); //Check that our replace was correct
-        }
-
-        [Test]
-        public void AllowToAddBookmarksWithWhiteSpaces()
-        {
-            //ExStart
-            //ExFor:OutlineOptions.BookmarksOutlineLevels
-            //ExFor:BookmarksOutlineLevelCollection.Add(String, Int32)
-            //ExSummary:Shows how adding bookmarks outlines with whitespaces(pdf, xps)
-            Document doc = new Document();
-            DocumentBuilder builder = new DocumentBuilder(doc);
-
-            // Add bookmarks with whitespaces. MS Word formats (like doc, docx) does not support bookmarks with whitespaces by default 
-            // and all whitespaces in the bookmarks were replaced with underscores. If you need to use bookmarks in PDF or XPS outlines, you can use them with whitespaces.
-            builder.StartBookmark("My Bookmark");
-            builder.Writeln("Text inside a bookmark.");
-
-            builder.StartBookmark("Nested Bookmark");
-            builder.Writeln("Text inside a NestedBookmark.");
-            builder.EndBookmark("Nested Bookmark");
-
-            builder.Writeln("Text after Nested Bookmark.");
-            builder.EndBookmark("My Bookmark");
-
-            // Specify bookmarks outline level. If you are using xps format, just use XpsSaveOptions.
-            PdfSaveOptions pdfSaveOptions = new PdfSaveOptions();
-            pdfSaveOptions.OutlineOptions.BookmarksOutlineLevels.Add("My Bookmark", 1);
-            pdfSaveOptions.OutlineOptions.BookmarksOutlineLevels.Add("Nested Bookmark", 2);
-
-            doc.Save(MyDir + @"\Artifacts\Bookmarks.WhiteSpaces.pdf", pdfSaveOptions);
-            //ExEnd
-
-            // Bind pdf with Aspose.Pdf
-            PdfBookmarkEditor bookmarkEditor = new PdfBookmarkEditor();
-            bookmarkEditor.BindPdf(MyDir + @"\Artifacts\Bookmarks.WhiteSpaces.pdf");
-
-            // Get all bookmarks from the document
-            Bookmarks bookmarks = bookmarkEditor.ExtractBookmarks();
-
-            Assert.AreEqual(2, bookmarks.Count);
-
-            // Assert that all the bookmarks title are with whitespaces
-            Assert.AreEqual("My Bookmark", bookmarks[0].Title);
-            Assert.AreEqual("Nested Bookmark", bookmarks[1].Title);
+            Assert.AreEqual("My Bookmark", doc.Range.Bookmarks[0].Name);
         }
 
         //ExStart
