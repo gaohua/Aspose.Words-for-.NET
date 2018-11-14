@@ -138,8 +138,8 @@ namespace ApiExamples
             //ExSummary: Show changes for headers and footers order
             Document doc = new Document(MyDir + "HeaderFooter.HeaderFooterOrder.docx");
 
-            //Assert that we use special header and footer for the first page
-            //The order for this: first header\footer, even header\footer, primary header\footer
+            // Assert that we use special header and footer for the first page
+            // The order for this: first header\footer, even header\footer, primary header\footer
             Section firstPageSection = doc.FirstSection;
             Assert.AreEqual(true, firstPageSection.PageSetup.DifferentFirstPageHeaderFooter);
 
@@ -156,11 +156,11 @@ namespace ApiExamples
             Assert.AreEqual("First header\r\nFirst footer\r\nSecond header\r\nSecond footer\r\nThird header\r\n" +
                             "Third footer\r\n", logger.Text);
 #endif
-            //Prepare our string builder for assert results without "DifferentFirstPageHeaderFooter"
+            // Prepare our string builder for assert results without "DifferentFirstPageHeaderFooter"
             logger.ClearText();
 
-            //Remove special first page
-            //The order for this: primary header, default header, primary footer, default footer, even header\footer
+            // Remove special first page
+            // The order for this: primary header, default header, primary footer, default footer, even header\footer
             firstPageSection.PageSetup.DifferentFirstPageHeaderFooter = false;
 
             doc.Range.Replace(new Regex("(header|footer)"), "", options);

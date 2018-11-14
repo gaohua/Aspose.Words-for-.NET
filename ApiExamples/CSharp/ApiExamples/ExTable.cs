@@ -910,7 +910,7 @@ namespace ApiExamples
             // Remove spacing between cells
             table.AllowCellSpacing = false;
 
-            doc.Save(MyDir + @"\Artifacts\Table.InsertTableUsingNodes.doc");
+            doc.Save(ArtifactsDir + "Table.InsertTableUsingNodes.doc");
             //ExEnd
 
             Assert.AreEqual(1, doc.GetChildNodes(NodeType.Table, true).Count);

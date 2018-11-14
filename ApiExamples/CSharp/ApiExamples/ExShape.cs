@@ -967,8 +967,8 @@ namespace ApiExamples
             yAxis.TickLabelPosition = AxisTickLabelPosition.NextToAxis;
             //ExEnd
 
-            doc.Save(MyDir + @"\Artifacts\Shape.InsertChartUsingAxisProperties Out.docx");
-            doc.Save(MyDir + @"\Artifacts\Shape.InsertChartUsingAxisProperties Out.pdf");
+            doc.Save(ArtifactsDir + "Shape.InsertChartUsingAxisProperties Out.docx");
+            doc.Save(ArtifactsDir + "Shape.InsertChartUsingAxisProperties Out.pdf");
         }
 
         [Test]
@@ -1083,8 +1083,8 @@ namespace ApiExamples
             chart.AxisY.NumberFormat.FormatCode = "#,##0";
             //ExEnd
 
-            doc.Save(MyDir + @"\Artifacts\Shape.SetNumberFormatToChartAxis Out.docx");
-            doc.Save(MyDir + @"\Artifacts\Shape.SetNumberFormatToChartAxis Out.pdf");
+            doc.Save(ArtifactsDir + "Shape.SetNumberFormatToChartAxis Out.docx");
+            doc.Save(ArtifactsDir + "Shape.SetNumberFormatToChartAxis Out.pdf");
         }
 
         // Note: Tests below used for verification conversion docx to pdf and the correct display.
@@ -1111,8 +1111,8 @@ namespace ApiExamples
                 new string[] { "Word", "PDF", "Excel", "GoogleDocs", "Note" },
                 new double[] { 1900000, 850000, 2100000, 600000, 1500000 });
 
-            doc.Save(MyDir + @"\Artifacts\Shape.TestDisplayChartsWithConversion Out.docx");
-            doc.Save(MyDir + @"\Artifacts\Shape.TestDisplayChartsWithConversion Out.pdf");
+            doc.Save(ArtifactsDir + "Shape.TestDisplayChartsWithConversion Out.docx");
+            doc.Save(ArtifactsDir + "Shape.TestDisplayChartsWithConversion Out.pdf");
         }
 
         [Test]
@@ -1140,8 +1140,8 @@ namespace ApiExamples
                 new string[] { "Word", "PDF", "Excel", "GoogleDocs", "Note" },
                 new double[] { 500000, 820000, 1500000, 400000, 100000 });
 
-            doc.Save(MyDir + @"\Artifacts\SurfaceChart Out.docx");
-            doc.Save(MyDir + @"\Artifacts\SurfaceChart Out.pdf");
+            doc.Save(ArtifactsDir + "SurfaceChart Out.docx");
+            doc.Save(ArtifactsDir + "SurfaceChart Out.pdf");
         }
 
         [Test]
@@ -1162,8 +1162,8 @@ namespace ApiExamples
                 new double[] { 1900000, 850000, 2100000, 600000, 1500000 },
                 new double[] { 900000, 450000, 2500000, 800000, 500000 });
 
-            doc.Save(MyDir + @"\Artifacts\BubbleChart Out.docx");
-            doc.Save(MyDir + @"\Artifacts\BubbleChart Out.pdf");
+            doc.Save(ArtifactsDir + "BubbleChart Out.docx");
+            doc.Save(ArtifactsDir + "BubbleChart Out.pdf");
         }
 
         [Test]
@@ -1178,7 +1178,7 @@ namespace ApiExamples
             shape.Width = 500;
             shape.Rotation = 30;
 
-            doc.Save(MyDir + @"\Artifacts\Shape.Resize.docx");
+            doc.Save(ArtifactsDir + "Shape.Resize.docx");
         }
 
         [Test]
@@ -1229,7 +1229,7 @@ namespace ApiExamples
             // Adding the following line is needed to make the shape displayed in center of a page.
             doc.CompatibilityOptions.OptimizeFor(MsWordVersion.Word2010);
 
-            doc.Save(MyDir + @"\Artifacts\Shape.LayoutInCell.docx");
+            doc.Save(ArtifactsDir + "Shape.LayoutInCell.docx");
             //ExEnd
         }
 
@@ -1251,7 +1251,7 @@ namespace ApiExamples
             OoxmlSaveOptions saveOptions = new OoxmlSaveOptions(SaveFormat.Docx);
             // "Strict" or "Transitional" compliance allows to save shape as DML
             saveOptions.Compliance = OoxmlCompliance.Iso29500_2008_Transitional;
-            doc.Save(MyDir + @"\Artifacts\RotatedShape.docx", saveOptions);
+            doc.Save(ArtifactsDir + "RotatedShape.docx", saveOptions);
             //ExEnd
         }
     }

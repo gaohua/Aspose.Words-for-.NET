@@ -2083,9 +2083,8 @@ namespace ApiExamples
             Document docToInsert = new Document(MyDir + "DocumentBuilder.KeepSourceFormatting.docx");
 
             builder.InsertDocument(docToInsert, ImportFormatMode.KeepSourceFormatting);
-            builder.Document.Save(MyDir + @"\Artifacts\DocumentBuilder.InsertDocument.KeepSourceFormatting.docx");
-            //ExEnd
             builder.Document.Save(ArtifactsDir + "DocumentBuilder.InsertDocument.docx");
+            //ExEnd
 
             Assert.IsTrue(DocumentHelper.CompareDocs(ArtifactsDir + "DocumentBuilder.InsertDocument.docx", GoldsDir + "DocumentBuilder.InsertDocument Gold.docx"));
         }

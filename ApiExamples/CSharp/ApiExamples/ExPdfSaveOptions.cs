@@ -101,12 +101,12 @@ namespace ApiExamples
             pdfSaveOptions.OutlineOptions.BookmarksOutlineLevels.Add("My Bookmark", 1);
             pdfSaveOptions.OutlineOptions.BookmarksOutlineLevels.Add("Nested Bookmark", 2);
 
-            doc.Save(MyDir + @"\Artifacts\Bookmarks.WhiteSpaces.pdf", pdfSaveOptions);
+            doc.Save(ArtifactsDir + "Bookmarks.WhiteSpaces.pdf", pdfSaveOptions);
             //ExEnd
 #if !__MOBILE__
             // Bind pdf with Aspose.Pdf
             PdfBookmarkEditor bookmarkEditor = new PdfBookmarkEditor();
-            bookmarkEditor.BindPdf(MyDir + @"\Artifacts\Bookmarks.WhiteSpaces.pdf");
+            bookmarkEditor.BindPdf(ArtifactsDir + "Bookmarks.WhiteSpaces.pdf");
 
             // Get all bookmarks from the document
             Bookmarks bookmarks = bookmarkEditor.ExtractBookmarks();
@@ -202,7 +202,7 @@ namespace ApiExamples
                 ImageCompression = PdfImageCompression.Jpeg,
                 PreserveFormFields = true
             };
-            doc.Save(MyDir + @"\Artifacts\SaveOptions.PdfImageCompression.pdf", options);
+            doc.Save(ArtifactsDir + "SaveOptions.PdfImageCompression.pdf", options);
 
             PdfSaveOptions optionsA1B = new PdfSaveOptions();
             optionsA1B.Compliance = PdfCompliance.PdfA1b;
@@ -292,12 +292,12 @@ namespace ApiExamples
             PdfSaveOptions options = new PdfSaveOptions();
             options.EscapeUri = isEscaped;
 
-            builder.Document.Save(MyDir + @"\Artifacts\PdfSaveOptions.EscapedUri.pdf", options);
+            builder.Document.Save(ArtifactsDir + "PdfSaveOptions.EscapedUri.pdf", options);
             //ExEnd
 
 #if !__MOBILE__
             Aspose.Pdf.Document pdfDocument =
-                new Aspose.Pdf.Document(MyDir + @"\Artifacts\PdfSaveOptions.EscapedUri.pdf");
+                new Aspose.Pdf.Document(ArtifactsDir + "PdfSaveOptions.EscapedUri.pdf");
 
             // Get first page
             Page page = pdfDocument.Pages[1];
@@ -389,7 +389,7 @@ namespace ApiExamples
                 HeaderFooterBookmarksExportMode = headerFooterBookmarksExportMode,
                 OutlineOptions = { DefaultBookmarksOutlineLevel = 1 }
             };
-            doc.Save(MyDir + @"\Artifacts\PdfSaveOption.HeaderFooterBookmarksExportMode.pdf", saveOptions);
+            doc.Save(ArtifactsDir + "PdfSaveOption.HeaderFooterBookmarksExportMode.pdf", saveOptions);
             //ExEnd
         }
     }

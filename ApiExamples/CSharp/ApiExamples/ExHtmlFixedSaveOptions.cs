@@ -24,11 +24,10 @@ namespace ApiExamples
             //ExFor:HtmlFixedSaveOptions.Encoding
             //ExSummary:Shows how to set encoding while exporting to HTML.
             Document doc = new Document();
-
             DocumentBuilder builder = new DocumentBuilder(doc);
+            
             builder.Writeln("Hello World!");
 
-            // Encoding the document
             HtmlFixedSaveOptions htmlFixedSaveOptions = new HtmlFixedSaveOptions
             {
                 Encoding = new ASCIIEncoding()

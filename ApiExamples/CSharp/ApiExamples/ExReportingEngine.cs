@@ -285,11 +285,11 @@ namespace ApiExamples
             BuildReport(template, new object[] { doc, Common.GetContracts() }, new[] { "src", "Contracts" }, 
                 ReportBuildOptions.None);
             template.Save(
-                MyDir + @"\Artifacts\ReportingEngine.InsertDocumentDinamicallyWithAdditionalTemplateChecking.docx");
+                ArtifactsDir + "ReportingEngine.InsertDocumentDinamicallyWithAdditionalTemplateChecking.docx");
 
             Assert.IsTrue(
                 DocumentHelper.CompareDocs(
-                    MyDir + @"\Artifacts\ReportingEngine.InsertDocumentDinamicallyWithAdditionalTemplateChecking.docx",
+                    ArtifactsDir + "ReportingEngine.InsertDocumentDinamicallyWithAdditionalTemplateChecking.docx",
                     MyDir + @"\Golds\ReportingEngine.InsertDocumentDinamicallyWithAdditionalTemplateChecking Gold.docx"),
                 "Fail inserting document by document");
         }
@@ -427,10 +427,10 @@ namespace ApiExamples
                     "display_text_expression"
                 });
 
-            template.Save(MyDir + @"\Artifacts\ReportingEngine.InsertHyperlinksDinamically.docx");
+            template.Save(ArtifactsDir + "ReportingEngine.InsertHyperlinksDinamically.docx");
 
             Assert.IsTrue(
-                DocumentHelper.CompareDocs(MyDir + @"\Artifacts\ReportingEngine.InsertHyperlinksDinamically.docx",
+                DocumentHelper.CompareDocs(ArtifactsDir + "ReportingEngine.InsertHyperlinksDinamically.docx",
                     MyDir + @"\Golds\ReportingEngine.InsertHyperlinksDinamically Gold.docx"),
                 "Fail inserting document by bytes");
         }
@@ -472,7 +472,7 @@ namespace ApiExamples
             Document doc = new Document(MyDir + "ReportingEngine.SingleColumnTableRow.docx");
             BuildReport(doc, Common.GetManagers(), "Managers");
 
-            doc.Save(MyDir + @"\Artifacts\ReportingEngine.SingleColumnTableRow.docx");
+            doc.Save(ArtifactsDir + "ReportingEngine.SingleColumnTableRow.docx");
         }
 
         [Test]
@@ -481,7 +481,7 @@ namespace ApiExamples
             Document doc = new Document(MyDir + "ReportingEngine.SingleColumnTableRowGreedy.docx");
             BuildReport(doc, Common.GetManagers(), "Managers");
 
-            doc.Save(MyDir + @"\Artifacts\ReportingEngine.SingleColumnTableRowGreedy.docx");
+            doc.Save(ArtifactsDir + "ReportingEngine.SingleColumnTableRowGreedy.docx");
         }
 
         [Test]
@@ -513,7 +513,7 @@ namespace ApiExamples
 
             BuildReport(doc, clients, "clients");
 
-            doc.Save(MyDir + @"\Artifacts\ReportingEngine.TableRowConditionalBlocks.docx");
+            doc.Save(ArtifactsDir + "ReportingEngine.TableRowConditionalBlocks.docx");
         }
 
         [Test]
@@ -531,7 +531,7 @@ namespace ApiExamples
 
             BuildReport(doc, obj);
 
-            doc.Save(MyDir + @"\Artifacts\IfGreedy.docx");
+            doc.Save(ArtifactsDir + "IfGreedy.docx");
         }
 
         public class AsposeData
@@ -715,9 +715,9 @@ namespace ApiExamples
 
             BuildReport(doc, Common.GetManagers(), "Managers");
 
-            doc.Save(MyDir + @"\Artifacts\ReportingEngine.DoNotRemoveEmptyParagraphs.docx");
+            doc.Save(ArtifactsDir + "ReportingEngine.DoNotRemoveEmptyParagraphs.docx");
 
-            Assert.IsTrue(DocumentHelper.CompareDocs(MyDir + @"\Artifacts\ReportingEngine.DoNotRemoveEmptyParagraphs.docx",
+            Assert.IsTrue(DocumentHelper.CompareDocs(ArtifactsDir + "ReportingEngine.DoNotRemoveEmptyParagraphs.docx",
                 MyDir + @"\Golds\ReportingEngine.DoNotRemoveEmptyParagraphs Gold.docx"));
         }
 
@@ -728,9 +728,9 @@ namespace ApiExamples
 
             BuildReport(doc, Common.GetManagers(), "Managers", ReportBuildOptions.RemoveEmptyParagraphs);
 
-            doc.Save(MyDir + @"\Artifacts\ReportingEngine.RemoveEmptyParagraphs.docx");
+            doc.Save(ArtifactsDir + "ReportingEngine.RemoveEmptyParagraphs.docx");
 
-            Assert.IsTrue(DocumentHelper.CompareDocs(MyDir + @"\Artifacts\ReportingEngine.RemoveEmptyParagraphs.docx",
+            Assert.IsTrue(DocumentHelper.CompareDocs(ArtifactsDir + "ReportingEngine.RemoveEmptyParagraphs.docx",
                 MyDir + @"\Golds\ReportingEngine.RemoveEmptyParagraphs Gold.docx"));
         }
 

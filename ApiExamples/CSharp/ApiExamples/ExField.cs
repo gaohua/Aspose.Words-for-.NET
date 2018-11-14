@@ -309,32 +309,27 @@ namespace ApiExamples
         //ExEnd
 
         [Test]
-        [Ignore("WORDSNET-16037")]
+        [Description("WORDSNET-16037")]
         public void InsertAndUpdateDirtyField()
         {
             //ExStart
             //ExFor:Field.IsDirty
+            //ExFor:LoadOptions.UpdateDirtyFields
             //ExSummary:Shows how to use special property for updating field result
             Document doc = new Document();
             DocumentBuilder builder = new DocumentBuilder(doc);
 
             Field fieldToc = builder.InsertTableOfContents("\\o \"1-3\" \\h \\z \\u");
             fieldToc.IsDirty = true;
-            //ExEnd
-
-            MemoryStream dstStream = new MemoryStream();
-            doc.Save(dstStream, SaveFormat.Docx);
-
-            // Assert that field model is correct
+            
+            MemoryStream stream = new MemoryStream();
+            doc.Save(stream, SaveFormat.Docx);
+            
             Assert.IsTrue(doc.Range.Fields[0].IsDirty);
 
             LoadOptions loadOptions = new LoadOptions { UpdateDirtyFields = false };
-
-            doc = new Document(dstStream, loadOptions);
-            Field tocField = doc.Range.Fields[0];
-
-            // Assert that isDirty saves 
-            Assert.IsTrue(tocField.IsDirty);
+            doc = new Document(stream, loadOptions);
+            //ExEnd
         }
 
         [Test]
@@ -701,7 +696,7 @@ namespace ApiExamples
             Assert.IsFalse(dropDownItems.Contains("Three and a half"));
             Assert.IsFalse(dropDownItems.Contains("Four"));
 
-            doc.Save(MyDir + @"\Artifacts\Fields.DropDownItems.docx");
+            doc.Save(ArtifactsDir + "Fields.DropDownItems.docx");
             //ExEnd
 
             // Empty the collection
@@ -751,7 +746,7 @@ namespace ApiExamples
             doc.MailMerge.Execute(table);
 
             doc.UpdateFields();
-            doc.Save(MyDir + @"\Artifacts\Fields.AskField.docx");
+            doc.Save(ArtifactsDir + "Fields.AskField.docx");
 
             Assert.AreEqual(
                 " ASK  MyAskField \"Please provide a response for this ASK field\" \\d \"Response from within the field.\" \\o",
@@ -823,7 +818,7 @@ namespace ApiExamples
 
             builder.Write("This text is in a custom position.");
 
-            doc.Save(MyDir + @"\Artifacts\Field.Advance.docx");
+            doc.Save(ArtifactsDir + "Field.Advance.docx");
             //ExEnd
         }
 
@@ -958,7 +953,7 @@ namespace ApiExamples
             Assert.AreEqual(" COMPARE  5 = \"2 + 3\"", field.GetFieldCode());
 
             doc.UpdateFields();
-            doc.Save(MyDir + @"\Artifacts\Field.Compare.docx");
+            doc.Save(ArtifactsDir + "Field.Compare.docx");
             //ExEnd
         }
 
@@ -1007,7 +1002,7 @@ namespace ApiExamples
             Assert.AreEqual(FieldIfComparisonResult.True, fieldIf.EvaluateCondition());
 
             doc.UpdateFields();
-            doc.Save(MyDir + @"\Artifacts\Field.If.docx");
+            doc.Save(ArtifactsDir + "Field.If.docx");
             //ExEnd
         }
 
@@ -1041,7 +1036,7 @@ namespace ApiExamples
                 }
             }
 
-            doc.Save(MyDir + @"\Artifacts\Field.AutoNum.docx");
+            doc.Save(ArtifactsDir + "Field.AutoNum.docx");
             //ExEnd
         }
 
@@ -1090,7 +1085,7 @@ namespace ApiExamples
                 }
             }
 
-            doc.Save(MyDir + @"\Artifacts\Field.AutoNumLegal.docx");
+            doc.Save(ArtifactsDir + "Field.AutoNumLegal.docx");
         }
 
         /// <summary>
@@ -1133,7 +1128,7 @@ namespace ApiExamples
                 }
             }
 
-            doc.Save(MyDir + @"\Artifacts\Field.AutoNumOut.docx");
+            doc.Save(ArtifactsDir + "Field.AutoNumOut.docx");
             //ExEnd
         }
 
@@ -1176,7 +1171,7 @@ namespace ApiExamples
             doc.FieldOptions.BuiltInTemplatesPaths = new[] { MyDir + "Document.BusinessBrochureTemplate.dotx" };
 
             // The text content of our building block will be visible in the output
-            doc.Save(MyDir + @"\Artifacts\Field.AutoText.dotx");
+            doc.Save(ArtifactsDir + "Field.AutoText.dotx");
             //ExEnd
         }
 
@@ -1211,7 +1206,7 @@ namespace ApiExamples
                             "\\s \"Heading 1\" " +
                             "\\t \"Hover tip text for AutoTextList goes here\"", field.GetFieldCode());
 
-            doc.Save(MyDir + @"\Artifacts\Field.AutoTextList.dotx");
+            doc.Save(ArtifactsDir + "Field.AutoTextList.dotx");
         }
 
         /// <summary>
@@ -1283,7 +1278,7 @@ namespace ApiExamples
             doc.MailMerge.Execute(table);
 
             doc.UpdateFields();
-            doc.Save(MyDir + @"\Artifacts\Field.GreetingLine.docx");
+            doc.Save(ArtifactsDir + "Field.GreetingLine.docx");
             //ExEnd
         }
 
@@ -1335,7 +1330,7 @@ namespace ApiExamples
             builder.Writeln("Paragraph 5");
 
             doc.UpdateFields();
-            doc.Save(MyDir + @"\Artifacts\Field.FieldListNum.docx");
+            doc.Save(ArtifactsDir + "Field.FieldListNum.docx");
             //ExEnd
         }
 
@@ -1377,7 +1372,7 @@ namespace ApiExamples
 
             doc.UpdateFields();
             doc.MailMerge.Execute(table);
-            doc.Save(MyDir + @"\Artifacts\Field.MergeField.docx");
+            doc.Save(ArtifactsDir + "Field.MergeField.docx");
             //ExEnd
         }
 
@@ -1467,7 +1462,7 @@ namespace ApiExamples
             Console.WriteLine(formFieldVisitor.GetText());
 
             doc.UpdateFields();
-            doc.Save(MyDir + @"\Artifacts\Field.FormField.docx");
+            doc.Save(ArtifactsDir + "Field.FormField.docx");
         }
 
         /// <summary>
@@ -1604,7 +1599,7 @@ namespace ApiExamples
 
             fieldToc.UpdatePageNumbers();
             doc.UpdateFields();
-            doc.Save(MyDir + @"\Artifacts\Field.FieldTOC.docx");
+            doc.Save(ArtifactsDir + "Field.FieldTOC.docx");
         }
 
         /// <summary>
@@ -1657,7 +1652,7 @@ namespace ApiExamples
             Assert.AreEqual(" TOC  \\f A \\l 1-3", fieldToc.GetFieldCode());
 
             doc.UpdateFields();
-            doc.Save(MyDir + @"\Artifacts\Field.FieldTOC.TC.docx");
+            doc.Save(ArtifactsDir + "Field.FieldTOC.TC.docx");
         }
 
         /// <summary>
@@ -1712,7 +1707,7 @@ namespace ApiExamples
 
             fieldToc.UpdatePageNumbers();
             doc.UpdateFields();
-            doc.Save(MyDir + @"\Artifacts\Field.FieldTOC.SEQ.docx");
+            doc.Save(ArtifactsDir + "Field.FieldTOC.SEQ.docx");
         }
 
         /// <summary>
@@ -1779,7 +1774,7 @@ namespace ApiExamples
             Assert.AreEqual(" CITATION  Book1 \\m Book2 \\l en-US \\p 19 \\f \"Prefix \" \\s \" Suffix\" \\v VII", field.GetFieldCode());
 
             doc.UpdateFields();
-            doc.Save(MyDir + @"\Artifacts\Field.Citation.docx");
+            doc.Save(ArtifactsDir + "Field.Citation.docx");
             //ExEnd
         }
 
@@ -1819,7 +1814,7 @@ namespace ApiExamples
             fieldInclude.TextConverter = "Microsoft Word";
 
             doc.UpdateFields();
-            doc.Save(MyDir + @"\Artifacts\Field.Include.docx");
+            doc.Save(ArtifactsDir + "Field.Include.docx");
             //ExEnd
         }
 
@@ -1882,7 +1877,7 @@ namespace ApiExamples
             field.InsertOnceOnMailMerge = true;
 
             doc.UpdateFields();
-            doc.Save(MyDir + @"\Artifacts\Field.Database.docx");
+            doc.Save(ArtifactsDir + "Field.Database.docx");
             //ExEnd
         }
 
@@ -1910,7 +1905,7 @@ namespace ApiExamples
             fieldIncludePicture.ResizeVertically = true;
 
             doc.UpdateFields();
-            doc.Save(MyDir + @"\Artifacts\Field.IncludePicture.docx");
+            doc.Save(ArtifactsDir + "Field.IncludePicture.docx");
             //ExEnd
         }
 
@@ -1944,7 +1939,7 @@ namespace ApiExamples
             fieldIncludeText.NamespaceMappings = "xmlns:n='myNamespace'";
             fieldIncludeText.XPath = "/catalog/cd/title";
 
-            doc.Save(MyDir + @"\Artifacts\Field.IncludeText.docx");
+            doc.Save(ArtifactsDir + "Field.IncludeText.docx");
         }
 
         /// <summary>
@@ -1998,7 +1993,7 @@ namespace ApiExamples
             fieldHyperlink.IsImageMap = false;
 
             doc.UpdateFields();
-            doc.Save(MyDir + @"\Artifacts\Field.Hyperlink.docx");
+            doc.Save(ArtifactsDir + "Field.Hyperlink.docx");
             //ExEnd
         }
 
@@ -2038,7 +2033,7 @@ namespace ApiExamples
             doc.MailMerge.Execute(dataTable);
 
             doc.UpdateFields();
-            doc.Save(MyDir + @"\Artifacts\Field.MergeFieldImageDimension.docx");
+            doc.Save(ArtifactsDir + "Field.MergeFieldImageDimension.docx");
         }
 
         /// <summary>
@@ -2203,7 +2198,7 @@ namespace ApiExamples
             builder.EndBookmark(mainBookmarkName);
 
             doc.UpdateFields();
-            doc.Save(MyDir + @"\Artifacts\Field.XE.docx");
+            doc.Save(ArtifactsDir + "Field.XE.docx");
             //ExEnd
         }
 
@@ -2241,7 +2236,7 @@ namespace ApiExamples
             fieldBarcode.IsBookmark = true;
 
             doc.UpdateFields();
-            doc.Save(MyDir + @"\Artifacts\Field.USAddressBarcode.docx");
+            doc.Save(ArtifactsDir + "Field.USAddressBarcode.docx");
             //ExEnd
         }
 
@@ -2306,7 +2301,7 @@ namespace ApiExamples
             fieldDisplayBarcode.CaseCodeStyle = "STD";
 
             doc.UpdateFields();
-            doc.Save(MyDir + @"\Artifacts\Field.DisplayBarcode.docx");
+            doc.Save(ArtifactsDir + "Field.DisplayBarcode.docx");
             //ExEnd
         }
 
@@ -2359,7 +2354,7 @@ namespace ApiExamples
 
             // Save the generated barcode image to the file system
             System.Drawing.Image img = doc.FieldOptions.BarcodeGenerator.GetBarcodeImage(barcodeParameters);
-            img.Save(MyDir + @"\Artifacts\Field.BarcodeGenerator.QR.jpg");
+            img.Save(ArtifactsDir + "Field.BarcodeGenerator.QR.jpg");
 
             // Insert the image into the document
             builder.InsertImage(img);
@@ -2373,7 +2368,7 @@ namespace ApiExamples
             barcodeParameters.FixCheckDigit = true;
 
             img = doc.FieldOptions.BarcodeGenerator.GetBarcodeImage(barcodeParameters);
-            img.Save(MyDir + @"\Artifacts\Field.BarcodeGenerator.EAN13.jpg");
+            img.Save(ArtifactsDir + "Field.BarcodeGenerator.EAN13.jpg");
             builder.InsertImage(img);
 
             // Configure barcode parameters for a CODE39 barcode
@@ -2383,7 +2378,7 @@ namespace ApiExamples
             barcodeParameters.AddStartStopChar = true;
 
             img = doc.FieldOptions.BarcodeGenerator.GetBarcodeImage(barcodeParameters);
-            img.Save(MyDir + @"\Artifacts\Field.BarcodeGenerator.CODE39.jpg");
+            img.Save(ArtifactsDir + "Field.BarcodeGenerator.CODE39.jpg");
             builder.InsertImage(img);
 
             // Configure barcode parameters for an ITF14 barcode
@@ -2393,10 +2388,10 @@ namespace ApiExamples
             barcodeParameters.CaseCodeStyle = "STD";
 
             img = doc.FieldOptions.BarcodeGenerator.GetBarcodeImage(barcodeParameters);
-            img.Save(MyDir + @"\Artifacts\Field.BarcodeGenerator.ITF14.jpg");
+            img.Save(ArtifactsDir + "Field.BarcodeGenerator.ITF14.jpg");
             builder.InsertImage(img);
 
-            doc.Save(MyDir + @"\Artifacts\Field.BarcodeGenerator.docx");
+            doc.Save(ArtifactsDir + "Field.BarcodeGenerator.docx");
         }
         //ExEnd
 #endif
@@ -2463,7 +2458,7 @@ namespace ApiExamples
                 "Sheet1!R1C1", true);
 
             doc.UpdateFields();
-            doc.Save(MyDir + @"\Artifacts\Field.LinkedObjectsAsText.docx");
+            doc.Save(ArtifactsDir + "Field.LinkedObjectsAsText.docx");
         }
 
         [Test] //ExSkip
@@ -2489,7 +2484,7 @@ namespace ApiExamples
                 "Sheet1!R1C1", true);
 
             doc.UpdateFields();
-            doc.Save(MyDir + @"\Artifacts\Field.LinkedObjectsAsImage.docx");
+            doc.Save(ArtifactsDir + "Field.LinkedObjectsAsImage.docx");
         }
 
         /// <summary>
@@ -2667,7 +2662,7 @@ namespace ApiExamples
             doc.FieldOptions.FileName = "Field.FileName.docx";
 
             doc.UpdateFields();
-            doc.Save(MyDir + @"\Artifacts\" + doc.FieldOptions.FileName);
+            doc.Save(ArtifactsDir + "" + doc.FieldOptions.FileName);
             //ExEnd
         }
 
@@ -2688,7 +2683,7 @@ namespace ApiExamples
             comboBox.CalculateOnExit = true;
 
             doc.UpdateFields();
-            doc.Save(MyDir + @"\Artifacts\Field.FieldOptionsBidi.docx");
+            doc.Save(ArtifactsDir + "Field.FieldOptionsBidi.docx");
             //ExEnd
         }
 
@@ -2767,7 +2762,7 @@ namespace ApiExamples
             builder.InsertField("TA \\c 2 \\l \"entry 3\"");
 
             doc.UpdateFields();
-            doc.Save(MyDir + @"\Artifacts\Field.TableOfAuthorities.Categories.docx");
+            doc.Save(ArtifactsDir + "Field.TableOfAuthorities.Categories.docx");
             //ExEnd
         }
 
@@ -2868,7 +2863,7 @@ namespace ApiExamples
             fieldStyleRef.SuppressNonDelimiters = true;
 
             doc.UpdateFields();
-            doc.Save(MyDir + @"\Artifacts\Field.FieldStyleRef.docx");
+            doc.Save(ArtifactsDir + "Field.FieldStyleRef.docx");
             //ExEnd
         }
         
@@ -2912,7 +2907,7 @@ namespace ApiExamples
             builder.Writeln();
 
             doc.UpdateFields();
-            doc.Save(MyDir + @"\Artifacts\Field.Date.docx");
+            doc.Save(ArtifactsDir + "Field.Date.docx");
             //ExEnd
         }
 
@@ -2950,7 +2945,7 @@ namespace ApiExamples
             builder.Writeln();
 
             doc.UpdateFields();
-            doc.Save(MyDir + @"\Artifacts\Field.CreateDate.docx");
+            doc.Save(ArtifactsDir + "Field.CreateDate.docx");
             //ExEnd
         }
     }

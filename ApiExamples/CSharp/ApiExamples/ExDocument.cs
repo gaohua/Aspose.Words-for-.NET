@@ -207,7 +207,7 @@ namespace ApiExamples
                     Document doc = new Document(byteStream);
 
                     // Convert the document to any format supported by Aspose.Words.
-                    doc.Save(MyDir + @"\Artifacts\Document.OpenFromWeb.docx");
+                    doc.Save(ArtifactsDir + "Document.OpenFromWeb.docx");
                 }
             }
             //ExEnd
@@ -321,7 +321,7 @@ namespace ApiExamples
             sdt.ParentNode.InsertBefore(start, sdt);
             sdt.ParentNode.InsertAfter(end, sdt);
 
-            doc.Save(MyDir + @"\Artifacts\Document.AnnotationsAtBlockLevel.docx", SaveFormat.Docx);
+            doc.Save(ArtifactsDir + "Document.AnnotationsAtBlockLevel.docx", SaveFormat.Docx);
             //ExEnd
         }
 
@@ -335,7 +335,7 @@ namespace ApiExamples
 
             // Specify load option to convert math shapes to office math objects on loading stage.
             Document doc = new Document(MyDir + "Document.ConvertShapeToOfficeMath.docx", loadOptions);
-            doc.Save(MyDir + @"\Artifacts\Document.ConvertShapeToOfficeMath.docx", SaveFormat.Docx);
+            doc.Save(ArtifactsDir + "Document.ConvertShapeToOfficeMath.docx", SaveFormat.Docx);
             //ExEnd
         }
 
@@ -2326,7 +2326,7 @@ namespace ApiExamples
 
             doc.LayoutOptions.ShowHiddenText = true;
 
-            doc.Save(MyDir + @"\Artifacts\Document.LayoutOptions.pdf");
+            doc.Save(ArtifactsDir + "Document.LayoutOptions.pdf");
             //ExEnd
         }
 
@@ -2622,7 +2622,7 @@ namespace ApiExamples
                 RemovePersonalInformation = true
             };
             
-            doc.Save(MyDir + @"\Artifacts\Document.RemovePersonalInformation.docx");
+            doc.Save(ArtifactsDir + "Document.RemovePersonalInformation.docx");
             //ExEnd
         }
 
@@ -2636,7 +2636,7 @@ namespace ApiExamples
             
             doc.LayoutOptions.ShowComments = false;
             
-            doc.Save(MyDir + @"\Artifacts\Document.DoNotShowComments.pdf");
+            doc.Save(ArtifactsDir + "Document.DoNotShowComments.pdf");
             //ExEnd
         }
 
@@ -2651,7 +2651,7 @@ namespace ApiExamples
             
             doc.LayoutOptions.RevisionOptions.ShowInBalloons = ShowInBalloons.FormatAndDelete;
   
-            doc.Save(MyDir + @"\Artifacts\Document.ShowRevisionsInBalloons.pdf");
+            doc.Save(ArtifactsDir + "Document.ShowRevisionsInBalloons.pdf");
             //ExEnd
         }
 
@@ -2666,7 +2666,7 @@ namespace ApiExamples
             Document target = new Document(MyDir + "Document.docx");
             target.CopyStylesFromTemplate(template);
 
-            target.Save(MyDir + @"\Artifacts\CopyStylesFromTemplateViaDocument.docx");
+            target.Save(ArtifactsDir + "CopyStylesFromTemplateViaDocument.docx");
             //ExEnd
         }
 
@@ -2681,7 +2681,7 @@ namespace ApiExamples
             Document target = new Document(MyDir + "Document.docx");
             target.CopyStylesFromTemplate(templatePath);
 
-            target.Save(MyDir + @"\Artifacts\CopyStylesFromTemplateViaString.docx");
+            target.Save(ArtifactsDir + "CopyStylesFromTemplateViaString.docx");
             //ExEnd
         }
     }

@@ -33,7 +33,7 @@ namespace ApiExamples
                 UseGdiEmfRenderer = false
             };
 
-            doc.Save(MyDir + @"\Artifacts\SaveOptions.UseGdiEmfRenderer.docx", saveOptions);
+            doc.Save(ArtifactsDir + "SaveOptions.UseGdiEmfRenderer.docx", saveOptions);
             //ExEnd
         }
 

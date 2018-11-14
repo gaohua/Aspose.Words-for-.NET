@@ -712,7 +712,7 @@ namespace ApiExamples
 
             doc.FontSettings = fontSettings;
 
-            doc.Save(MyDir + @"\Artifacts\Font.EnableFontSubstitution.pdf");
+            doc.Save(ArtifactsDir + "Font.EnableFontSubstitution.pdf");
 
             Assert.True(callback.mFontWarnings[0].Description
                 .Equals(
@@ -734,7 +734,7 @@ namespace ApiExamples
 
             doc.FontSettings = fontSettings;
 
-            doc.Save(MyDir + @"\Artifacts\Font.EnableFontSubstitution.pdf");
+            doc.Save(ArtifactsDir + "Font.EnableFontSubstitution.pdf");
 
             Assert.True(callback.mFontWarnings[0].Description
                 .Equals(
@@ -757,7 +757,7 @@ namespace ApiExamples
 
             doc.FontSettings = fontSettings;
 
-            doc.Save(MyDir + @"\Artifacts\Rendering.MissingFontNotification.pdf");
+            doc.Save(ArtifactsDir + "Rendering.MissingFontNotification.pdf");
 
             Assert.True(callback.mFontWarnings[0].Description
                 .Equals("Font substitutes: 'Arial' replaced with 'Arvo'."));
@@ -1090,7 +1090,7 @@ namespace ApiExamples
             byte[] embeddedFontBytes = mittelschriftInfo.GetEmbeddedFont(EmbeddedFontFormat.OpenType, EmbeddedFontStyle.Regular);
             Assert.IsNotNull(embeddedFontBytes);
             // Then we can save the font to our directory
-            File.WriteAllBytes(MyDir + @"\Artifacts\Alte DIN 1451 Mittelschrift.ttf", embeddedFontBytes);
+            File.WriteAllBytes(ArtifactsDir + "Alte DIN 1451 Mittelschrift.ttf", embeddedFontBytes);
             
             // If we want to extract a font from a .doc as opposed to a .docx, we need to make sure to set the appropriate embedded font format
             doc = new Document(MyDir + "Font.Embedded.doc");
@@ -1300,10 +1300,10 @@ namespace ApiExamples
             fontSettings.FallbackSettings.Load(MyDir + "Fallback.xml");
 
             doc.FontSettings = fontSettings;
-            doc.Save(MyDir + @"\Artifacts\LoadFontFallbackSettingsFromFile.pdf");
+            doc.Save(ArtifactsDir + "LoadFontFallbackSettingsFromFile.pdf");
 
             // Saves font fallback setting by string
-            doc.FontSettings.FallbackSettings.Save(MyDir + @"\Artifacts\FallbackSettings.xml");
+            doc.FontSettings.FallbackSettings.Save(ArtifactsDir + "FallbackSettings.xml");
             //ExEnd
         }
 
@@ -1325,11 +1325,11 @@ namespace ApiExamples
                 doc.FontSettings = fontSettings;
             }
 
-            doc.Save(MyDir + @"\Artifacts\LoadFontFallbackSettingsFromStream.pdf");
+            doc.Save(ArtifactsDir + "LoadFontFallbackSettingsFromStream.pdf");
 
             // Saves font fallback setting by stream
             using (FileStream fontFallbackStream =
-                new FileStream(MyDir + @"\Artifacts\FallbackSettings.xml", FileMode.Create))
+                new FileStream(ArtifactsDir + "FallbackSettings.xml", FileMode.Create))
             {
                 doc.FontSettings.FallbackSettings.Save(fontFallbackStream);
             }

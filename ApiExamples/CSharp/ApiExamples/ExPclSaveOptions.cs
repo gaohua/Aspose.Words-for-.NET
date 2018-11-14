@@ -64,7 +64,7 @@ namespace ApiExamples
                 section.PageSetup.OtherPagesTray = 12;
             }
 
-            doc.Save(MyDir + @"\Artifacts\Document.EpubConversion.pcl");
+            doc.Save(ArtifactsDir + "Document.EpubConversion.pcl");
         }
     }
 }

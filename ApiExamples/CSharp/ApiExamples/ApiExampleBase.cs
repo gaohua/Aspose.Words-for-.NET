@@ -19,8 +19,6 @@ namespace ApiExamples
     /// </summary>
     public class ApiExampleBase
     {
-        private readonly string artifactsPath = MyDir + @"\Artifacts\";
-
         [SetUp]
         public void SetUp()
         {
@@ -40,7 +38,7 @@ namespace ApiExamples
             if (!CheckForSkipTearDown())
             {
                 //Delete all dirs and files from directory
-                Directory.Delete(artifactsPath, true);
+                Directory.Delete(ArtifactsDir, true);
             }
         }
 

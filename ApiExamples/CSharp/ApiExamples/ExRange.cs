@@ -122,7 +122,7 @@ namespace ApiExamples
             doc.Range.Replace("sad", "&ldquo; some text &rdquo;", options);
             //ExEnd
 
-            doc.Save(MyDir + @"\Artifacts\Range.FindAndReplaceWithMetacharacters.docx");
+            doc.Save(ArtifactsDir + "Range.FindAndReplaceWithMetacharacters.docx");
         }
 
         [Test]

@@ -220,7 +220,7 @@ namespace ApiExamples
 
             doc.MailMerge.Execute(new[] { "Option_1", "Option_2" }, new object[] { null, null });
 
-            doc.Save(MyDir + @"\Artifacts\RemoveColonBetweenEmptyMergeFields.docx");
+            doc.Save(ArtifactsDir + "RemoveColonBetweenEmptyMergeFields.docx");
             //ExEnd
 
             Assert.AreEqual(resultText, doc.GetText());
@@ -438,7 +438,7 @@ namespace ApiExamples
                 new string[] { "FullName" },
                 new object[] { "James Bond" });
 
-            doc.Save(MyDir + @"\Artifacts\MailMerge.UnconditionalMergeFieldsAndRegions.docx");
+            doc.Save(ArtifactsDir + "MailMerge.UnconditionalMergeFieldsAndRegions.docx");
             //ExEnd
         }
     }
