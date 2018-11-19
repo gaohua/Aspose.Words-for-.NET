@@ -45,7 +45,7 @@ namespace Xamarin.Android
             {
                 // If True, the tests will run automatically when the app starts
                 // otherwise you must run them manually.
-                AutoRun = true
+                AutoRun = false
             };
 
             LoadApplication(nunit);

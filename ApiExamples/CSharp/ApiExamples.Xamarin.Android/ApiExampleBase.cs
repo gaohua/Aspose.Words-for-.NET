@@ -142,7 +142,7 @@ namespace ApiExamples
         private static readonly String gDatabaseDir;
         private static readonly String gGoldsDir;
 
-        internal static readonly string TestLicenseFileName = Path.Combine(mExternalAppPath, "Data/License/Aspose.Total.lic");
+        internal static readonly string TestLicenseFileName = Path.Combine(mExternalAppPath, "Data/Licenses/Aspose.Total.lic");
 
         public void CopyData()
         {
