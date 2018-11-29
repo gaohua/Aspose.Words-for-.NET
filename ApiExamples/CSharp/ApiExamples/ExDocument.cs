@@ -1635,7 +1635,7 @@ namespace ApiExamples
         public void ShowRevisionBalloonsInPdf()
         {
             //ExStart
-            //ExFor:RevisionOptions.ShowRevisionBalloons
+            //ExFor:RevisionOptions.ShowInBalloons
             //ExSummary:Shows how render tracking changes in balloons
             Document doc = new Document(MyDir + "ShowRevisionBalloons.docx");
 
@@ -2056,27 +2056,6 @@ namespace ApiExamples
             doc.TrackRevisions = true;
 
             doc.Save(ArtifactsDir + "RevisionsTrackedFromMSWord.docx");
-            //ExEnd
-        }
-
-        [Test]
-        public void HasMacros()
-        {
-            //ExStart
-            //ExFor:Document.HasMacros
-            //ExSummary:Shows how to check if a document contains macros.
-            Document doc = new Document();
-
-            // A blank document has no macros by default
-            Assert.IsFalse(doc.HasMacros);
-
-            // We can't programmatically add macros but we can open a file that has them
-            Document docWithMacros = new Document(MyDir + "Document.HasMacros.docm");
-            Assert.IsTrue(docWithMacros.HasMacros);
-
-            // We can also remove them
-            docWithMacros.RemoveMacros();
-            Assert.IsFalse(docWithMacros.HasMacros);
             //ExEnd
         }
 
