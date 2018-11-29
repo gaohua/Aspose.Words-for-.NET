@@ -2024,9 +2024,9 @@ namespace ApiExamples
             System.Data.DataTable dataTable = CreateDataTable("Images", "ImageColumn",
                 new string[]
                 {
-                    MyDir + @"Images\Aspose.Words.gif",
-                    MyDir + @"Images\Watermark.png",
-                    MyDir + @"Images\dotnet-logo.png"
+                    ImageDir + "Aspose.Words.gif",
+                    ImageDir + "Watermark.png",
+                    ImageDir + "dotnet-logo.png"
                 });
 
             doc.MailMerge.FieldMergingCallback = new MergedImageResizer(450, 200, MergeFieldImageDimensionUnit.Point);

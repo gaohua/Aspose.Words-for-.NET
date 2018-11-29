@@ -290,7 +290,7 @@ namespace ApiExamples
             Assert.IsTrue(
                 DocumentHelper.CompareDocs(
                     ArtifactsDir + "ReportingEngine.InsertDocumentDinamicallyWithAdditionalTemplateChecking.docx",
-                    MyDir + @"\Golds\ReportingEngine.InsertDocumentDinamicallyWithAdditionalTemplateChecking Gold.docx"),
+                    GoldsDir + "ReportingEngine.InsertDocumentDinamicallyWithAdditionalTemplateChecking Gold.docx"),
                 "Fail inserting document by document");
         }
 
@@ -408,7 +408,10 @@ namespace ApiExamples
             BuildReport(template, imageUri, "src", ReportBuildOptions.None);
             template.Save(ArtifactsDir + "ReportingEngine.InsertImageDinamically.docx");
 
-            Assert.IsTrue(DocumentHelper.CompareDocs(ArtifactsDir + "ReportingEngine.InsertImageDinamically.docx", GoldsDir + "ReportingEngine.InsertImageDinamically(uri) Gold.docx"), "Fail inserting document by bytes");
+            Assert.IsTrue(
+                DocumentHelper.CompareDocs(ArtifactsDir + "ReportingEngine.InsertImageDinamically.docx",
+                    GoldsDir + "ReportingEngine.InsertImageDinamically(uri) Gold.docx"),
+                "Fail inserting document by bytes");
         }
 
         [Test]
@@ -431,7 +434,7 @@ namespace ApiExamples
 
             Assert.IsTrue(
                 DocumentHelper.CompareDocs(ArtifactsDir + "ReportingEngine.InsertHyperlinksDinamically.docx",
-                    MyDir + @"\Golds\ReportingEngine.InsertHyperlinksDinamically Gold.docx"),
+                    GoldsDir + "ReportingEngine.InsertHyperlinksDinamically Gold.docx"),
                 "Fail inserting document by bytes");
         }
 
@@ -705,7 +708,8 @@ namespace ApiExamples
 
             doc.Save(ArtifactsDir + "ReportingEngine.BackColor.docx");
 
-            Assert.IsTrue(DocumentHelper.CompareDocs(ArtifactsDir + "ReportingEngine.BackColor.docx", GoldsDir + "ReportingEngine.BackColor Gold.docx"));
+            Assert.IsTrue(DocumentHelper.CompareDocs(ArtifactsDir + "ReportingEngine.BackColor.docx",
+                GoldsDir + "ReportingEngine.BackColor Gold.docx"));
         }
 
         [Test]
@@ -718,7 +722,7 @@ namespace ApiExamples
             doc.Save(ArtifactsDir + "ReportingEngine.DoNotRemoveEmptyParagraphs.docx");
 
             Assert.IsTrue(DocumentHelper.CompareDocs(ArtifactsDir + "ReportingEngine.DoNotRemoveEmptyParagraphs.docx",
-                MyDir + @"\Golds\ReportingEngine.DoNotRemoveEmptyParagraphs Gold.docx"));
+                GoldsDir + "ReportingEngine.DoNotRemoveEmptyParagraphs Gold.docx"));
         }
 
         [Test]
@@ -731,7 +735,7 @@ namespace ApiExamples
             doc.Save(ArtifactsDir + "ReportingEngine.RemoveEmptyParagraphs.docx");
 
             Assert.IsTrue(DocumentHelper.CompareDocs(ArtifactsDir + "ReportingEngine.RemoveEmptyParagraphs.docx",
-                MyDir + @"\Golds\ReportingEngine.RemoveEmptyParagraphs Gold.docx"));
+                GoldsDir + "ReportingEngine.RemoveEmptyParagraphs Gold.docx"));
         }
 
         private static void BuildReport(Document document, object dataSource, string dataSourceName,

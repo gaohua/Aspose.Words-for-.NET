@@ -172,7 +172,7 @@ namespace ApiExamples
             //ExId:TextboxToTable
             //ExSummary:Shows how to convert a textbox to a table and retain almost identical formatting. This is useful for HTML export.
             // Open the document
-            Document doc = new Document(MyDir + "Shape.Textbox.doc");
+            Document doc = new Document(MyDir + "Shape.TextBox.doc");
 
             // Convert all shape nodes which contain child nodes.
             // We convert the collection to an array as static "snapshot" because the original textboxes will be removed after conversion which will
@@ -185,7 +185,7 @@ namespace ApiExamples
                 }
             }
 
-            doc.Save(ArtifactsDir + "Table.ConvertTextboxToTable.html");
+            doc.Save(ArtifactsDir + "Table.ConvertTextBoxToTable.html");
         }
 
         /// <summary>

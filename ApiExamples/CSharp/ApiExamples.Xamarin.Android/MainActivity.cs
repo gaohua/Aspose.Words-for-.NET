@@ -42,7 +42,7 @@ namespace ApiExamples.Xamarin.Android
             {
                 Options = new TestOptions
                 {
-                    AutoRun = true, 
+                    AutoRun = false, 
                     CreateXmlResultFile = true
                 }
             };
