@@ -403,9 +403,6 @@
     <Compile Include="..\..\CSharp\ApiExamples\ExVariableCollection.cs">
       <Link>ExVariableCollection.cs</Link>
     </Compile>
-    <Compile Include="..\..\CSharp\ApiExamples\ExVisitor.cs">
-      <Link>ExVisitor.cs</Link>
-    </Compile>
     <Compile Include="..\..\CSharp\ApiExamples\ExWarningInfoCollection.cs">
       <Link>ExWarningInfoCollection.cs</Link>
     </Compile>
@@ -453,6 +450,9 @@
     </Compile>
     <Compile Include="..\..\CSharp\ApiExamples\TestData\TestClasses\SignPersonTestClass.cs">
       <Link>TestData\TestClasses\SignPersonTestClass.cs</Link>
+    </Compile>
+    <Compile Include="..\ApiExamples\ExDocumentVisitor.cs">
+      <Link>ExDocumentVisitor.cs</Link>
     </Compile>
     <Compile Include="ApiExampleBase.cs" />
     <Compile Include="MainActivity.cs" />
