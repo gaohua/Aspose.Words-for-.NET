@@ -25,27 +25,26 @@ using Android.App;
 using Android.Content.PM;
 using Android.OS;
 using NUnit.Runner.Services;
+using Xamarin.Forms.Platform.Android;
 
-namespace Xamarin.Android
+namespace ApiExamples.Xamarin.Android
 {
-    [Activity(Label = "ApiExamples.Xamarin.Android", Icon = "@drawable/icon", Theme = "@android:style/Theme.Holo.Light", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
-    public class MainActivity : Xamarin.Forms.Platform.Android.FormsApplicationActivity
+    [Activity(Label = "ApiExamples.Xamarin.Android", Icon = "@drawable/icon", Theme = "@android:style/Theme.Holo.Light", MainLauncher = true, Name = "aspose.android.Main", ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+    public class MainActivity : FormsApplicationActivity
     {
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
 
-            Xamarin.Forms.Forms.Init(this, savedInstanceState);
-            
-            // This will load all tests within the current project
-            NUnit.Runner.App nunit = new NUnit.Runner.App();
+            global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
 
-            // Available options for testing
-            nunit.Options = new TestOptions
+            NUnit.Runner.App nunit = new NUnit.Runner.App
             {
-                // If True, the tests will run automatically when the app starts
-                // otherwise you must run them manually.
-                AutoRun = false
+                Options = new TestOptions
+                {
+                    AutoRun = true, 
+                    CreateXmlResultFile = true
+                }
             };
 
             LoadApplication(nunit);
